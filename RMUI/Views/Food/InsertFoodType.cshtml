@@ -1,0 +1,29 @@
+﻿@model RMUI.Models.FoodTypeDisplayModel
+
+@{
+    ViewData["Title"] = "Insert Food Type";
+}
+
+<h1>Add Food Type</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="InsertFoodType">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="FoodType" class="control-label"></label>
+                <input asp-for="FoodType" class="form-control" />
+                <span asp-validation-for="FoodType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="ViewFoodTypes">Back to Food Type List</a>
+</div>
+

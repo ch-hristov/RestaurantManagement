@@ -1,0 +1,77 @@
+﻿@model IEnumerable<RMUI.Models.OrderDisplayModel>
+
+@{
+    ViewData["Title"] = "ViewOrders";
+}
+
+<h1>All Orders</h1>
+
+<p>
+    <a asp-action="CreateOrder">Create New Order</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TableNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Server)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SubTotal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tax)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Total)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BillPaid)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TableNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Server)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SubTotal)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tax)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Total)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BillPaid)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "EditOrder", new { id = item.Id }) |
+                @Html.ActionLink("Details", "TableOrdersDetails", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "DeleteOrder", new { id = item.Id })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

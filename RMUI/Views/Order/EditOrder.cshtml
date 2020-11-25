@@ -1,0 +1,64 @@
+﻿@model RMUI.Models.OrderDisplayModel
+
+@{
+    ViewData["Title"] = "EditOrder";
+}
+
+<h1 class="text-center">Edit Order</h1>
+<hr />
+
+<div class="row text-center">
+    <div style="width:30%; margin:50px auto;">
+        <form asp-action="UpdateOrder">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Id" class="control-label"></label>
+                <input asp-for="Id" class="form-control" />
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TableNumber" class="control-label"></label>
+                <input asp-for="TableNumber" class="form-control" />
+                <span asp-validation-for="TableNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Server" class="control-label"></label>
+                <input asp-for="Server" class="form-control" />
+                <span asp-validation-for="Server" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SubTotal" class="control-label"></label>
+                <input asp-for="SubTotal" class="form-control" />
+                <span asp-validation-for="SubTotal" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Tax" class="control-label"></label>
+                <input asp-for="Tax" class="form-control" />
+                <span asp-validation-for="Tax" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Total" class="control-label"></label>
+                <input asp-for="Total" class="form-control" />
+                <span asp-validation-for="Total" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatedDate" class="control-label"></label>
+                <input asp-for="CreatedDate" class="form-control" />
+                <span asp-validation-for="CreatedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="BillPaid" /> @Html.DisplayNameFor(model => model.BillPaid)
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="text-center">
+    <a asp-action="ViewOrders">Back to Order List</a>
+</div>
+
