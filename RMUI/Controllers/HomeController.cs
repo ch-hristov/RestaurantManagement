@@ -37,29 +37,6 @@ namespace RMUI.Controllers
         }
 
 
-        // Run once to insert roles for user
-        //public async Task<IActionResult> Privacy()
-        //{
-
-
-        //    var user1 = await _userManager.FindByEmailAsync("yimiao@iamyimiao.com");
-        //    if (user1 != null)
-        //    {
-        //        await _userManager.AddToRoleAsync(user1, "Admin");
-        //        await _userManager.AddToRoleAsync(user1, "Manager");
-        //        await _userManager.AddToRoleAsync(user1, "Chef");
-        //    }
-
-        //    var user2 = await _userManager.FindByEmailAsync("amy@iamamy.com");
-        //    if (user2 != null)
-        //    {
-        //        await _userManager.AddToRoleAsync(user2, "Manager");
-        //        await _userManager.AddToRoleAsync(user2, "Server");
-        //    }
-        //    return View();
-        //}
-
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

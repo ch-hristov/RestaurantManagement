@@ -1,0 +1,20 @@
+﻿@model IEnumerable<OrderStatistic>;
+
+<div>
+
+    @Html.ActionLink("Day", "Statistics", new { statistic = 0 }) |
+
+    @Html.ActionLink("Week", "Statistics", new { statistic = 1 }) |
+
+    @Html.ActionLink("Month", "Statistics", new { statistic = 2 })
+</div>
+
+
+@{
+    foreach (var item in Model)
+    {
+        <p>@item.FoodName.FoodName : @item.Amount</p>
+    }
+
+
+}

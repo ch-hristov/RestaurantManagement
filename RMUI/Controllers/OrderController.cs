@@ -106,6 +106,55 @@ namespace RMUI.Controllers
             return Json(list);
         }
 
+        public enum StatisticTarget
+        {
+            Day,
+            Week,
+            Month,
+            Year
+        }
+
+        public async Task<IActionResult> Statistics(StatisticTarget statistic = StatisticTarget.Week)
+        {
+            var orders = await _order.GetAllOrderDetailRecords();
+
+            var days = 0;
+            switch (statistic)
+            {
+                case StatisticTarget.Day:
+                    days = 1;
+                    break;
+                case StatisticTarget.Week:
+                    days = 7;
+                    break;
+                case StatisticTarget.Month:
+                    days = 30;
+                    break;
+                case StatisticTarget.Year:
+                    days = 365;
+                    break;
+                default:
+                    break;
+            }
+
+            var lowerBoundary = DateTime.Now.Date - new TimeSpan(days, 0, 0, 0);
+
+            var requests = orders.Where(x => x.OrderDate.Date >= lowerBoundary)
+                                 .GroupBy(x => x.FoodId)
+                                 .Select((group) =>
+                                {
+                                    return new OrderStatistic()
+                                    {
+                                        FoodName = _food.GetFoodById(group.Key).Result,
+                                        Amount = group.Sum(x => x.Quantity)
+                                    };
+                                })
+                                 .OrderByDescending(b => b.Amount)
+                                 .ToList();
+
+            return View(requests);
+        }
+
 
         // Get Food object with Id = id and return as JsonResult for use in JQuery function call
         public async Task<JsonResult> GetFoodById(int id)
@@ -161,7 +210,7 @@ namespace RMUI.Controllers
             return View();
         }
 
- 
+
         // Get the list of ordered food details by dining table TableNumber = tableNumber
         // Need to type in the tableNumber in view for search request 
         [HttpPost]
@@ -221,7 +270,7 @@ namespace RMUI.Controllers
             }
 
             // Get order summary for all the dining tables
-            var orderList = await _order.GetAllOrders();  
+            var orderList = await _order.GetAllOrders();
 
             var table = await _table.GetTableByTableNumber(tableNumber);
 
@@ -347,8 +396,8 @@ namespace RMUI.Controllers
         public async Task<IActionResult> OrderDetailsByTableNumber(int tableNumber)
         {
             var table = await _table.GetTableByTableNumber(tableNumber);
-            var orderDetails = await _order.GetOrderDetailByDiningTable(table.Id);       
-            
+            var orderDetails = await _order.GetOrderDetailByDiningTable(table.Id);
+
             var displayDetails = new List<OrderDetailDisplayModel>();
             foreach (var detail in orderDetails)
             {
