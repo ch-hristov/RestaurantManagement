@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<OrderStatistic>;
 
-<div>
+<div style="margin:10px;">
 
     @Html.ActionLink("Day", "Statistics", new { statistic = 0 }) |
 
@@ -10,11 +10,41 @@
 </div>
 
 
-@{
-    foreach (var item in Model)
-    {
-        <p>@item.FoodName.FoodName : @item.Amount</p>
-    }
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Food Type
+            </th>
+            <th>
+                Food Name
+            </th>
+            <th>
+                Total Quantity
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
 
 
-}
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.FoodName.FoodType
+                    </td>
+                    <td>
+                        @item.FoodName.FoodName
+                    </td>
+                    <td>
+                        @item.Amount
+                    </td>
+                </tr>
+
+            }
+
+        }
+
+    </tbody>
+</table>
