@@ -9,7 +9,6 @@
     @Html.ActionLink("Month", "Statistics", new { statistic = 2 })
 </div>
 
-
 <table class="table">
     <thead>
         <tr>
@@ -26,8 +25,6 @@
     </thead>
     <tbody>
         @{
-
-
             foreach (var item in Model)
             {
                 <tr>
@@ -41,10 +38,7 @@
                         @item.Amount
                     </td>
                 </tr>
-
             }
-
         }
-
     </tbody>
 </table>
