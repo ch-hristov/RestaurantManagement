@@ -42,4 +42,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="OrderId" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="ef25677b-5b99-4902-9891-1934832c1a40" ChangeDateTime="12/08/2020 15:11:40">
+    <Property Name="ElementName" Value="[dbo].[Food].[isBlocked]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Food]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IsBlocked" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="a55d9705-2544-407c-a680-8a1c047aefc9" ChangeDateTime="12/09/2020 01:24:29">
+    <Property Name="ElementName" Value="[dbo].[Advertisements].[string]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Advertisements]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Ad1" />
+  </Operation>
 </Operations>

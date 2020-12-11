@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using RMDataLibrary.Models;
 
 namespace RMUI.Data
 {
@@ -28,5 +29,7 @@ namespace RMUI.Data
                 modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole { Name = role, NormalizedName = role.ToUpper() });
             }
         }
+
+        public DbSet<RMDataLibrary.Models.AdsModel> AdsModel { get; set; }
     }
 }

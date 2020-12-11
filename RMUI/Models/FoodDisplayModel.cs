@@ -29,5 +29,15 @@ namespace RMUI.Models
         [Required]
         [Display(Name = "Food Type Id")]
         public int TypeId { get; set; }
+
+        [Required]
+        [Display(Name = "Blocked")]
+        public bool IsBlocked { get; set; }
+
+
+        [Required]
+        [Display(Name = "Is promo?")]
+        public bool IsPromo { get; set; }
+
     }
 }

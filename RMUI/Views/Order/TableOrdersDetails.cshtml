@@ -1,10 +1,10 @@
-﻿@model IEnumerable<RMUI.Models.OrderDetailDisplayModel>
+﻿    @model IEnumerable<RMUI.Models.OrderDetailDisplayModel>
 
 @{
     ViewData["Title"] = "TableOrdersDetails";
 }
 
-<h1>Orders List by Table</h1>
+<h1>Orders List by Table</h1>       
 
 <p>
     <a asp-action="CreateOrder">Add Order</a>
@@ -70,22 +70,3 @@
         }
     </tbody>
 </table>
-
-
-<div class="container mt-lg-5">
-    <div class="row">
-        <div class="col-4"></div>
-        <div class="col-4">
-            <form asp-action="SaveOrderByTable">
-                <div class="form-group">
-                    <label for="tNumber" class="h5">Table number: </label>
-                    <input id="tNumber" name="tableNumber" />
-                </div>
-                <div class="form-group text-center">
-                    <input type="submit" value="Submit Order" class="btn btn-warning" />
-                </div>
-            </form>
-        </div>
-        <div class="col-4"></div>
-    </div>
-</div>

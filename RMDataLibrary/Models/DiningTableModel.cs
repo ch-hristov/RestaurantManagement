@@ -14,5 +14,9 @@ namespace RMDataLibrary.Models
 
         // Number of seats in this Diningtable
         public int Seats { get; set; }
+
+        // Whether the table is blocked or not
+        public bool IsBlocked { get; set; }
+
     }
 }

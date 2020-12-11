@@ -19,5 +19,9 @@ namespace RMUI.Models
         [Required]
         [Range(1, 20, ErrorMessage = "You need to enter a valid number for Seats.")]
         public int Seats { get; set; }
+
+        [Required]
+        [Display(Name = "Blocked")]
+        public bool IsBlocked { get; set; }
     }
 }

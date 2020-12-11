@@ -23,6 +23,17 @@ namespace RMDataLibrary.DataAccess
         }
 
 
+        public async Task InsertAds(AdsModel model)
+        {
+            await _sql.SaveData<AdsModel>("Advertisement_Insert", model);
+        }
+
+        public async Task<List<AdsModel>> GetAds()
+        {
+            return await _sql.LoadData<AdsModel, dynamic>("Advertisement_GetAll", new { });
+        }
+
+
         // Get all persons from database as a list
         public async Task<List<PersonModel>> GetAllPeople()
         {

@@ -5,5 +5,7 @@
     [FoodName] NVARCHAR(100) NOT NULL, 
     [Price] MONEY NOT NULL, 
     [TypeId] INT NOT NULL, 
+    [IsBlocked] BIT NOT NULL DEFAULT 0, 
+    [IsPromo] BIT NOT NULL DEFAULT 0, 
     CONSTRAINT [FK_Food_ToFoodType] FOREIGN KEY (TypeId) REFERENCES FoodType(Id) 
 )

@@ -25,8 +25,10 @@ namespace RMDataLibrary.DataAccess
 
             using (IDbConnection connection = new SqlConnection(connectionString))
             {
-                var results = await connection.QueryAsync<T>(storedProcedure, parameters, commandType: CommandType.StoredProcedure);
-
+                var results = await connection.QueryAsync<T>(storedProcedure, 
+                                                             parameters, 
+                                                             commandType: CommandType.StoredProcedure);
+                 
                 return results.ToList();
             }
         }

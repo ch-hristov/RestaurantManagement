@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RMDataLibrary.DataAccess;
-using RMDataLibrary.Models;
 using RMUI.Models;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace RMUI.Controllers
 {
@@ -35,55 +32,49 @@ namespace RMUI.Controllers
 
 
         // Get bill details for a specific dining table with TableNumber = tableNumber
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> ViewBill(int tableNumber)
         {
             if (await _table.IsValidTableNumber(tableNumber) == false)
-            {
                 return RedirectToAction("TableNotExistError", "Home");
-            }
-            var table = await _table.GetTableByTableNumber(tableNumber);
-            var order = await _order.GetOrderByTable(table.Id);
-            if (order == null)
-            {
-                return RedirectToAction("NoOrderError", "Home");
-            }
 
-            var server = await _people.GetPersonById(order.ServerId);
+
+            var table = await _table.GetTableByTableNumber(tableNumber);
             var orderDetails = await _order.GetOrderDetailByDiningTable(table.Id);
 
-            BillDisplayModel bill = new BillDisplayModel
+            if (orderDetails.Count == 0) 
+                return RedirectToAction("NoOrderError", "Home");
+
+            var serverId = orderDetails.FirstOrDefault().ServerId;
+            var server = await _people.GetPersonById(serverId);
+
+            // computes total amounts
+            var orderDisplay = await OrderDisplayModel.FromDetails(orderDetails, _food, 0, server.FullName, table.Id);
+
+            var bill = new BillDisplayModel
             {
-                OrderId = order.Id,
                 TableNumber = tableNumber,
                 Server = server.FullName,
-                SubTotal = order.SubTotal,
-                Tax = order.Tax,
-                Total = order.Total,
-                BillPaid = order.BillPaid
+                SubTotal = orderDisplay.SubTotal,
+                Tax = orderDisplay.Tax,
+                Total = orderDisplay.Total,
+                BillPaid = false
             };
 
-            if (orderDetails == null)
+            foreach (var detail in orderDetails)
             {
-                return RedirectToAction("NoOrderError", "Home");
-            }
-            else
-            {
-                foreach (var detail in orderDetails)
-                {
-                    var food = await _food.GetFoodById(detail.FoodId);
+                var food = await _food.GetFoodById(detail.FoodId);
 
-                    bill.OrderDetails.Add(new OrderDetailDisplayModel
-                    {
-                        Id = detail.Id,
-                        TableNumber = table.TableNumber,
-                        Server = server.FullName,
-                        FoodName = food.FoodName,
-                        Price = food.Price,
-                        Quantity = detail.Quantity,
-                        OrderDate = detail.OrderDate
-                    });
-                }
+                bill.OrderDetails.Add(new OrderDetailDisplayModel
+                {
+                    Id = detail.Id,
+                    TableNumber = table.TableNumber,
+                    Server = server.FullName,
+                    FoodName = food.FoodName,
+                    Price = food.Price,
+                    Quantity = detail.Quantity,
+                    OrderDate = detail.OrderDate
+                });
             }
 
             return View(bill);
@@ -102,21 +93,12 @@ namespace RMUI.Controllers
         public async Task<IActionResult> PayBill(BillDisplayModel displayBill)
         {
             var table = await _table.GetTableByTableNumber(displayBill.TableNumber);
-            string[] fullName = displayBill.Server.Split(" ");
-            var server = await _people.GetPersonByFullName(fullName[0], fullName[1]);
+            await _order.InsertOrderByTable(table.Id);
 
-            BillModel bill = new BillModel
-            {
-                OrderId = displayBill.OrderId,
-                DiningTableId = table.Id,
-                ServerId = server.Id,
-                SubTotal = displayBill.SubTotal,
-                Tax = displayBill.Tax,
-                Total = displayBill.Total,
-                BillPaid = true
-            };
+            var newOrder = await _order.GetOrderByTable(table.Id);
+            await _order.PayBill(newOrder);
 
-            await _bill.InsertBill(bill);
+            var submitted = await _order.GetOrderById(newOrder.Id);
 
             return RedirectToAction("Index", "Home");
         }

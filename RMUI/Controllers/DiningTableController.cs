@@ -30,10 +30,11 @@ namespace RMUI.Controllers
         {
             if (ModelState.IsValid)
             {
-                DiningTableModel newTable = new DiningTableModel
+                var newTable = new DiningTableModel
                 {
                     TableNumber = table.TableNumber,
-                    Seats = table.Seats
+                    Seats = table.Seats,
+                    IsBlocked = false
                 };
 
                 await _data.InsertTable(newTable);
@@ -42,6 +43,18 @@ namespace RMUI.Controllers
             }
 
             return View();
+        }
+
+        public async Task<IActionResult> BlockDiningTable(int id, bool status)
+        {
+            var foundTable = await _data.GetTableById(id);
+
+            foundTable.IsBlocked = status;
+
+            await _data.UpdateTable(foundTable);
+
+            return RedirectToAction(nameof(ViewDiningTables));
+
         }
 
 
@@ -58,7 +71,8 @@ namespace RMUI.Controllers
                 {
                     Id = table.Id,
                     TableNumber = table.TableNumber,
-                    Seats = table.Seats
+                    Seats = table.Seats,
+                    IsBlocked = table.IsBlocked
                 });
             }
 

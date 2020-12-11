@@ -13,9 +13,6 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.TableNumber)
             </th>
             <th>
@@ -36,42 +33,55 @@
             <th>
                 @Html.DisplayNameFor(model => model.BillPaid)
             </th>
-            <th></th>
+            <th>
+                Actions
+            </th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TableNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Server)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SubTotal)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Tax)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Total)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BillPaid)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "EditOrder", new { id = item.Id }) |
-                @Html.ActionLink("Details", "TableOrdersDetails", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "DeleteOrder", new { id = item.Id })
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TableNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Server)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SubTotal)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tax)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Total)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BillPaid)
+                </td>
+                <td>
+                    @{
+                        if (!item.BillPaid)
+                        {
+                            @*@Html.ActionLink("Edit", "EditOrder", new { id = item.Id }) @:|*@
+
+                            @Html.ActionLink("Details", "TableOrdersDetails", new { tableId = item.TableNumber }) @:|
+
+                            @Html.ActionLink("Bill", "ViewBill", "Bill", new { tableNumber = item.TableNumber })
+
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Print", "PrintOrder", new { id = item.Id })
+                        }
+                    }
+
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

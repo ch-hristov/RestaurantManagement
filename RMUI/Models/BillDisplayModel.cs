@@ -8,10 +8,6 @@ namespace RMUI.Models
 {
     public class BillDisplayModel
     {
-        [Required]
-        [Display(Name = "Order Id")]
-        public int OrderId { get; set; }
-
         [Required(ErrorMessage = "You need to enter a valid Table Number.")]
         [Display(Name = "Table Number")]
         public int TableNumber { get; set; }

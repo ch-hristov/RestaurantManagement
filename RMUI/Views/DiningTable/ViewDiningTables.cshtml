@@ -25,22 +25,30 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TableNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Seats)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "EditDiningTable", new { id=item.Id }) |
-                @Html.ActionLink("Delete", "DeleteDiningTable", new { id=item.Id })
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TableNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Seats)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "EditDiningTable", new { id = item.Id }) |
+                    @if (!item.IsBlocked)
+                        @Html.ActionLink("Block", "BlockDiningTable", new { id = item.Id, status = true }) 
+                    @if (item.IsBlocked)
+                        @Html.ActionLink("Unblock", "BlockDiningTable", new { id = item.Id, status = false }) 
+                    |
+
+                    @Html.ActionLink("Delete", "DeleteDiningTable", new { id = item.Id })
+
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

@@ -8,7 +8,7 @@ namespace RMDataLibrary.Models
     {
         // Id in database
         public int Id { get; set; }
-        
+
         // Type of food
         public string FoodType { get; set; }
 
@@ -20,5 +20,9 @@ namespace RMDataLibrary.Models
 
         // Id of Food Type for this food
         public int TypeId { get; set; }
+
+        public bool IsBlocked { get; set; }
+
+        public bool IsPromo { get; set; }
     }
 }

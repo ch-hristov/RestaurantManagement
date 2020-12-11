@@ -24,10 +24,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Price)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TypeId)
-            </th>
-            <th></th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -46,10 +43,19 @@
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TypeId)
-            </td>
-            <td>
                 @Html.ActionLink("Edit", "EditFood", new { id = item.Id }) |
+                @if (!item.IsBlocked)
+                    @Html.ActionLink("Block", "BlockFood", new { id = item.Id, status = true })
+                @if (item.IsBlocked)
+                    @Html.ActionLink("Unblock", "BlockFood", new { id = item.Id, status = false })
+
+                |
+                @if (!item.IsPromo)
+                    @Html.ActionLink("Start promotion", "PromoFood", new { id = item.Id, status = true }) 
+                @if (item.IsPromo)
+                    @Html.ActionLink("End promotion", "PromoFood", new { id = item.Id, status = false }) 
+                |
+
                 @Html.ActionLink("Delete", "DeleteFood", new { id = item.Id })
             </td>
         </tr>

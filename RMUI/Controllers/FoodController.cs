@@ -41,6 +41,29 @@ namespace RMUI.Controllers
             return View();
         }
 
+        public async Task<IActionResult> BlockFood(int id, bool status)
+        {
+            var foundFood = await _data.GetFoodById(id);
+
+            foundFood.IsBlocked = status;
+
+            await _data.UpdateFood(foundFood);
+
+            return RedirectToAction(nameof(ViewFoods));
+
+        }
+
+        public async Task<IActionResult> PromoFood(int id, bool status)
+        {
+            var foundFood = await _data.GetFoodById(id);
+
+            foundFood.IsPromo = status;
+
+            await _data.UpdateFood(foundFood);
+
+            return RedirectToAction(nameof(ViewFoods));
+
+        }
 
         public async Task<IActionResult> ViewFoodTypes()
         {
@@ -99,14 +122,16 @@ namespace RMUI.Controllers
                     FoodType = food.FoodType,
                     FoodName = food.FoodName,
                     Price = food.Price,
-                    TypeId = food.TypeId
+                    TypeId = food.TypeId,
+                    IsBlocked = food.IsBlocked,
+                    IsPromo = food.IsPromo
                 });
             }
 
             return View(foods);
         }
 
-      
+
         // Edit food with database Id = id
         public async Task<IActionResult> EditFood(int id)
         {

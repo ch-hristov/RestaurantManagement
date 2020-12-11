@@ -20,9 +20,7 @@ namespace RMDataLibrary.DataAccess
         // and update BillPaid info in order and orderDetail tables
         public async Task InsertBill(BillModel bill)
         {
-            await _sql.SaveData("Order_UpdateBillPaid", new { Id = bill.OrderId });
-            await _sql.SaveData("OrderDetail_UpdateBillPaid", new { bill.DiningTableId, bill.OrderId});
-            await _sql.SaveData("Bill_Insert", bill);
+            
         }
     }
 }

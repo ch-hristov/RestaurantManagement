@@ -3,11 +3,13 @@
 	@FoodType nvarchar(100),
 	@FoodName nvarchar(100),
 	@Price money,
-	@TypeId int
+	@TypeId int,
+	@IsBlocked bit,
+	@IsPromo bit
 
 AS
 	update dbo.Food 
-	set FoodType = @FoodType, FoodName = @FoodName, Price = @Price, TypeId = @TypeId
+	set FoodType = @FoodType, FoodName = @FoodName, Price = @Price, TypeId = @TypeId, IsBlocked = @IsBlocked, IsPromo = @IsPromo
 	where Id = @Id;
 
 RETURN 0

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using RMDataLibrary.DataAccess;
+using RMDataLibrary.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -37,5 +39,39 @@ namespace RMUI.Models
         [Required]
         [Display(Name = "Bill Paid")]
         public bool BillPaid { get; set; }
+
+
+        public OrderDisplayModel() { }
+
+        public async static Task<OrderDisplayModel> FromDetails(
+            IEnumerable<OrderDetailModel> details,
+            IFoodData _food,
+            decimal taxRate,
+            string server,
+            int tableNumber)
+        {
+            decimal subTotal = 0;
+            var firstOrder = details.OrderBy(x => x.OrderDate).First();
+            foreach (var detail in details)
+            {
+                var food = await _food.GetFoodById(detail.FoodId);
+                subTotal += detail.Quantity * food.Price;
+            }
+
+            var tax = subTotal * taxRate;
+            var total = subTotal + tax;
+
+            return new OrderDisplayModel
+            {
+                BillPaid = false,
+                Server = server,
+                CreatedDate = firstOrder.OrderDate,
+                SubTotal = subTotal,
+                Tax = tax,
+                Total = total,
+                TableNumber = tableNumber
+            };
+        }
+
     }
 }

@@ -12,5 +12,7 @@ namespace RMDataLibrary.DataAccess
         Task<PersonModel> GetPersonByFullName(string firstName, string lastName);
         Task InsertPerson(PersonModel person);
         Task UpdatePerson(PersonModel person);
+        Task InsertAds(AdsModel model);
+        Task<List<AdsModel>> GetAds();
     }
 }

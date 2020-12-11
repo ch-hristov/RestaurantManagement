@@ -31,7 +31,7 @@ namespace RMUI
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
@@ -57,12 +57,7 @@ namespace RMUI
                     Email = "abc@xyz.com"
                 };
 
-                IdentityResult result = userManager.CreateAsync(user, "Spaghetti135_").Result;
-
-                //if (result.Succeeded)
-                //{
-                    
-                //}
+                _ = userManager.CreateAsync(user, "Spaghetti135_").Result;
             }
             var token = userManager.GenerateEmailConfirmationTokenAsync(u).Result;
             userManager.ConfirmEmailAsync(u, token).Wait();

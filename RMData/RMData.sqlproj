@@ -96,7 +96,6 @@
     <Build Include="dbo\StoredProcedures\OrderDetail_Insert.sql" />
     <Build Include="dbo\StoredProcedures\OrderDetail_GetByDiningTable.sql" />
     <Build Include="dbo\StoredProcedures\Order_GetById.sql" />
-    <Build Include="dbo\StoredProcedures\Order_GetAll.sql" />
     <Build Include="dbo\StoredProcedures\Order_GetByDiningTable.sql" />
     <Build Include="dbo\StoredProcedures\OrderDetail_Delete.sql" />
     <Build Include="dbo\StoredProcedures\Order_Delete.sql" />
@@ -110,9 +109,14 @@
     <Build Include="dbo\StoredProcedures\FoodType_Delete.sql" />
     <Build Include="dbo\StoredProcedures\Order_GetAllRecords.sql" />
     <Build Include="dbo\StoredProcedures\OrderDetail_GetAllRecords.sql" />
+    <Build Include="dbo\StoredProcedures\OrderDetail_GetByOrderId.sql" />
+    <Build Include="dbo\Tables\Advertisement.sql" />
+    <Build Include="dbo\StoredProcedures\Advertisement_Insert.sql" />
+    <Build Include="dbo\StoredProcedures\Advertisement_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PublishLocation\RMData.publish.xml" />
+    <None Include="RMData.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="RMData.refactorlog" />
