@@ -11,6 +11,7 @@ namespace RMDataLibrary.Models
         public int Id { get; set; }
 
         // Id of the dining table that ordered this food 
+
         public int DiningTableId { get; set; }
 
         // Id of the server that serves this dining table
@@ -25,5 +26,8 @@ namespace RMDataLibrary.Models
 
         // Id of order summary that contains this ordered food
         public int OrderId { get; set; }
+        
+        // Always 1-4 and the order is always in constant positions
+        public int SeatNumber { get; set; }
     }
 }

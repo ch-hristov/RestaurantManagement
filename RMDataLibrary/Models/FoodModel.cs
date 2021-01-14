@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace RMDataLibrary.Models
+﻿namespace RMDataLibrary.Models
 {
     public class FoodModel
     {
@@ -24,5 +20,12 @@ namespace RMDataLibrary.Models
         public bool IsBlocked { get; set; }
 
         public bool IsPromo { get; set; }
+
+        public string DisplayPhoto1 { get; set; } = "";
+
+        public string DisplayPhoto2 { get; set; } = "";
+
+        public string ItemDescription { get; set; }
+
     }
 }

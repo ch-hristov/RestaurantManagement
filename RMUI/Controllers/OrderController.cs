@@ -6,6 +6,7 @@ using iText.Layout.Properties;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Localization;
 using RMDataLibrary.DataAccess;
 using RMDataLibrary.Models;
 using RMUI.Models;
@@ -18,19 +19,23 @@ using System.Threading.Tasks;
 namespace RMUI.Controllers
 {
     [Authorize(Roles = "Server")]
-    public class OrderController : Controller
+    public partial class OrderController : Controller
     {
         private readonly IFoodData _food;
         private readonly IPersonData _people;
         private readonly IDiningTableData _table;
         private readonly IOrderData _order;
+        private readonly IStringLocalizer<OrderController> _localizer;
 
-        public OrderController(IFoodData food, IPersonData people, IDiningTableData table, IOrderData order)
+        public OrderController(IFoodData food, IPersonData people,
+                               IDiningTableData table, IOrderData order,
+                               IStringLocalizer<OrderController> localizer)
         {
             _food = food;
             _people = people;
             _table = table;
             _order = order;
+            _localizer = localizer;
         }
 
 
@@ -90,7 +95,6 @@ namespace RMUI.Controllers
             return list;
         }
 
-
         // Get all foods with FoodType Id = typeId and populate as dropdown list items
         // return as JsonResult for use in JQuery function call
         public async Task<JsonResult> GetFoodsByTypeId(int typeId)
@@ -108,14 +112,6 @@ namespace RMUI.Controllers
             }
 
             return Json(list);
-        }
-
-        public enum StatisticTarget
-        {
-            Day,
-            Week,
-            Month,
-            Year
         }
 
         public async Task<IActionResult> Statistics(StatisticTarget statistic = StatisticTarget.Week)
@@ -180,6 +176,22 @@ namespace RMUI.Controllers
             var foods = await GetFoodTypes();
             ViewBag.FoodTypeList = foods;
 
+            var list = new List<SelectListItem>();
+
+            foreach (var food in Enumerable.Range(1, 4))
+            {
+                list.Add(new SelectListItem
+                {
+                    Text = food.ToString(),
+                    Value = food.ToString()
+                });
+            }
+
+            ViewBag.SeatList = list;
+
+            ViewBag.CreateOrderLabel = _localizer["Create Order"];
+            ViewBag.AddFoodLabel = _localizer["Add food"];
+
             return View();
         }
 
@@ -190,17 +202,19 @@ namespace RMUI.Controllers
         {
             if (ModelState.IsValid)
             {
+                var t = await GetAllTables();
+                var table = await _table.GetTableByTableNumber(int.Parse(t.ToList()[order.TableNumber - 1].Text));
                 var detail = new OrderDetailModel
                 {
-                    DiningTableId = order.TableNumber,
+                    DiningTableId = table.Id,
                     ServerId = int.Parse(order.Server),
                     FoodId = int.Parse(order.FoodName),
                     Quantity = order.Quantity,
+                    SeatNumber = order.SeatNumber,
                 };
 
                 await _order.InsertOrderDetail(detail);
             }
-
 
             // Dropdown list content is null after data post, need to repopulate the list
             var tables = await GetAllTables();
@@ -211,6 +225,19 @@ namespace RMUI.Controllers
 
             var foods = await GetFoodTypes();
             ViewBag.FoodTypeList = foods;
+            var list = new List<SelectListItem>();
+
+            foreach (var food in Enumerable.Range(1, 4))
+            {
+                list.Add(new SelectListItem
+                {
+                    Text = food.ToString(),
+                    Value = food.ToString()
+                });
+            }
+
+            ViewBag.SeatList = list;
+
 
             return View();
         }
@@ -279,7 +306,7 @@ namespace RMUI.Controllers
                     var firstOrder = orderList.OrderBy(x => x.OrderDate).First();
                     var server = await _people.GetPersonById(firstOrder.ServerId);
 
-                    var orderDisplay = await OrderDisplayModel.FromDetails(orderList, _food, 0, server.FullName, table.Id);
+                    var orderDisplay = await OrderDisplayModel.FromDetails(orderList, _food, 0, server.FullName, table.TableNumber);
                     orders.Add(orderDisplay);
                 }
             }
@@ -536,11 +563,9 @@ namespace RMUI.Controllers
             table.AddCell(total
                 );
 
-
             document.Add(newline);
             document.Add(table);
             document.Add(ls);
-
 
             document.Close();
 

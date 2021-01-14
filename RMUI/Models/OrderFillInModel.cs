@@ -32,5 +32,10 @@ namespace RMUI.Models
         [Required]
         public int Quantity { get; set; }
 
+        [Required]
+        [Display(Name = "Seat number")]
+        [Range(1, 4)]
+        public int SeatNumber { get;  set; }
+
     }
 }

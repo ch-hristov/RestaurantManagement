@@ -13,12 +13,8 @@ namespace RMUI.Models
 
         [Required]
         [Display(Name = "Table Number")]
-        [Range(1, 100, ErrorMessage = "You need to enter a valid Table Number.")]
+        [Range(1, 1000, ErrorMessage = "You need to enter a valid Table Number.")]
         public int TableNumber { get; set; }
-
-        [Required]
-        [Range(1, 20, ErrorMessage = "You need to enter a valid number for Seats.")]
-        public int Seats { get; set; }
 
         [Required]
         [Display(Name = "Blocked")]

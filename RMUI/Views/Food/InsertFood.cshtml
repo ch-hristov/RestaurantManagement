@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Insert Food";
 }
+<script src="~/lib/jquery/dist/jquery.js"></script>
 
 <h1 class="text-center">Add Food</h1>
 
@@ -13,7 +14,9 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="FoodType" class="control-label"></label>
-                <input asp-for="FoodType" class="form-control" />
+                <select id="foodType" asp-for="FoodType" class="form-control" asp-items="@(new SelectList(ViewBag.FoodTypeList, "Value", "Text"))">
+                    <option>--select--</option>
+                </select>
                 <span asp-validation-for="FoodType" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -22,9 +25,32 @@
                 <span asp-validation-for="FoodName" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="ItemDescription" class="control-label"></label>
+                <input asp-for="ItemDescription" class="form-control" />
+                <span asp-validation-for="ItemDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Price" class="control-label"></label>
                 <input asp-for="Price" class="form-control" />
                 <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="VisualUrl1" class="control-label"></label>
+                <input id="visual1" asp-for="VisualUrl1" class="form-control" />
+                <span asp-validation-for="VisualUrl1" class="text-danger"></span>
+
+                <img style="margin:10px;" width="250" height="250" name="imageHolder1" id="imageHolder1"
+                     src="http://i.imgur.com/zAyt4lX.jpg">
+            </div>
+
+            <div class="form-group">
+                <label asp-for="VisualUrl2" class="control-label"></label>
+                <input id="visual2" asp-for="VisualUrl2" class="form-control" />
+                <span asp-validation-for="VisualUrl2" class="text-danger"></span>
+                <img style="margin:10px;" width="250" height="250" name="imageHolder2" id="imageHolder2"
+                     src="http://i.imgur.com/zAyt4lX.jpg">
+
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -36,6 +62,20 @@
 <div class="text-center">
     <a asp-action="ViewFoods">Back to Food List</a>
 </div>
+
+
+<script>
+    function register(selector, holder) {
+        $(selector).bind('input', function () {
+            $(holder).attr('src', $(selector).val()); //concatinate path if required
+        });
+    }
+    $(document).ready(function ($) {
+        register('#visual1', '#imageHolder1')
+        register('#visual2', '#imageHolder2')
+    })
+
+</script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

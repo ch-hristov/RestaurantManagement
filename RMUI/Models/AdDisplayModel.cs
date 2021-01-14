@@ -25,6 +25,17 @@ namespace RMUI.Models
         [Url]
         public string Ad3 { get; set; }
 
-        public DateTime CreateDate { get; set; }
+        public DateTime CreateDate { get; set; } = DateTime.Now;
+
+        [Display(Name = "Blocked")]
+        public bool Ad1Blocked { get;  set; }
+
+        [Display(Name = "Blocked")]
+
+        public bool Ad3Blocked { get;  set; }
+
+        [Display(Name = "Blocked")]
+
+        public bool Ad2Blocked { get;  set; }
     }
 }

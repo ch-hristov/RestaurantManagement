@@ -3,10 +3,8 @@
 @{
     ViewData["Title"] = "View";
 }
-
-<h1>View</h1>
-
-<h4>AdsModel</h4>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<h4>@ViewBag.ModifyAdsLabel</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -15,18 +13,53 @@
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="Ad1" class="control-label"></label>
-                <input asp-for="Ad1" class="form-control" />
+                <input id="ad1" asp-for="Ad1" class="form-control" />
                 <span asp-validation-for="Ad1" class="text-danger"></span>
+
+                <div style="display:flex; flex-direction:row; justify-content:center;">
+                    <img style="margin:10px;" width="250" height="250" name="imageHolder1" id="imageHolder1" src="http://i.imgur.com/zAyt4lX.jpg">
+                    <div style="display:flex; flex-direction:column; justify-content:center">
+                        <span>@ViewBag.DisableAdLabel</span>
+                        <label class="switch">
+                            <input asp-for="Ad1Blocked" type="checkbox">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+
+                </div>
             </div>
             <div class="form-group">
                 <label asp-for="Ad2" class="control-label"></label>
-                <input asp-for="Ad2" class="form-control" />
+                <input id="ad2" asp-for="Ad2" class="form-control" />
                 <span asp-validation-for="Ad2" class="text-danger"></span>
+                <div style="display:flex; flex-direction:row; justify-content:center;">
+                    <img style="margin:10px;" width="250" height="250" name="imageHolder2" id="imageHolder2" src="http://i.imgur.com/zAyt4lX.jpg">
+                    <div style="display:flex; flex-direction:column; justify-content:center">
+                        <span>@ViewBag.DisableAdLabel</span>
+                        <label class="switch">
+                            <input asp-for="Ad2Blocked" type="checkbox">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+
+                </div>
             </div>
             <div class="form-group">
                 <label asp-for="Ad3" class="control-label"></label>
-                <input asp-for="Ad3" class="form-control" />
+                <input id="ad3" asp-for="Ad3" class="form-control" />
                 <span asp-validation-for="Ad3" class="text-danger"></span>
+
+                <div style="display:flex; flex-direction:row; justify-content:center;">
+                    <img style="margin:10px;" width="250" height="250" name="imageHolder3" id="imageHolder3" src="http://i.imgur.com/zAyt4lX.jpg">
+                    <div style="display:flex; flex-direction:column; justify-content:center">
+                        <span>@ViewBag.DisableAdLabel</span>
+                        <label class="switch">
+                            <input asp-for="Ad3Blocked"  type="checkbox">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+
+                </div>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
@@ -35,9 +68,24 @@
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
+
+
+<script>
+    function register(selector, holder) {
+        $(selector).bind('input', function () {
+            $(holder).attr('src', $(selector).val()); 
+        });
+    }
+    $(document).ready(function ($) {
+        register('#ad1', '#imageHolder1')
+        register('#ad2', '#imageHolder2')
+        register('#ad3', '#imageHolder3')
+    })
+
+</script>
+
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

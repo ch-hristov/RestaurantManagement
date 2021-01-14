@@ -11,11 +11,8 @@
     <div style="width:40%; margin:50px auto;">
         <form asp-action="UpdateFood" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Id" class="control-label"></label>
-                <input asp-for="Id" class="form-control" />
-                <span asp-validation-for="Id" class="text-danger"></span>
-            </div>
+
+
             <div class="form-group">
                 <label asp-for="FoodType" class="control-label"></label>
                 <input asp-for="FoodType" class="form-control" />
@@ -32,10 +29,34 @@
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="ItemDescription" class="control-label"></label>
+                <input asp-for="ItemDescription" class="form-control" />
+                <span asp-validation-for="ItemDescription" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="VisualUrl1" class="control-label"></label>
+                <input asp-for="VisualUrl1" class="form-control" />
+                <span asp-validation-for="VisualUrl1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="VisualUrl2" class="control-label"></label>
+                <input asp-for="VisualUrl2" class="form-control" />
+                <span asp-validation-for="VisualUrl2" class="text-danger"></span>
+            </div>
+
+            <div hidden="hidden" class="form-group">
+                <label asp-for="Id" class="control-label"></label>
+                <input asp-for="Id" class="form-control" />
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>
+
+            <div hidden="hidden" class="form-group">
                 <label asp-for="TypeId" class="control-label"></label>
                 <input asp-for="TypeId" class="form-control" />
                 <span asp-validation-for="TypeId" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

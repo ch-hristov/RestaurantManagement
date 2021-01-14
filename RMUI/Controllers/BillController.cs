@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using RMDataLibrary.DataAccess;
 using RMUI.Models;
 using System.Linq;
@@ -15,18 +16,26 @@ namespace RMUI.Controllers
         private readonly IPersonData _people;
         private readonly IFoodData _food;
         private readonly IBillData _bill;
+        private readonly IStringLocalizer<BillController> _localizer;
 
-        public BillController(IOrderData order, IDiningTableData table, IPersonData people, IFoodData food, IBillData bill)
+        public BillController(IOrderData order,
+                              IDiningTableData table,
+                              IPersonData people,
+                              IFoodData food,
+                              IBillData bill,
+                              IStringLocalizer<BillController> localizer)
         {
             _order = order;
             _table = table;
             _people = people;
             _food = food;
             _bill = bill;
+            _localizer = localizer;
         }
 
         public IActionResult Index()
         {
+
             return View();
         }
 
@@ -35,6 +44,19 @@ namespace RMUI.Controllers
         [HttpGet]
         public async Task<IActionResult> ViewBill(int tableNumber)
         {
+            ViewBag.FoodNameLabel = _localizer["Food Name"];
+            ViewBag.FoodPriceLabel = _localizer["Food Price"];
+            ViewBag.FoodQuantityLabel = _localizer["Items Quantity"];
+            ViewBag.FoodOrderDateLabel = _localizer["Order Date"];
+            ViewBag.BillDetailLabel = _localizer["Bill Detail"];
+            ViewBag.TableNumberLabel = _localizer["Table Number"];
+            ViewBag.Server = _localizer["Server"];
+            ViewBag.Subtotal = _localizer["Subtotal"];
+            ViewBag.Tax = _localizer["Tax"];
+            ViewBag.Total = _localizer["Total"];
+            ViewBag.BillPaid = _localizer["Bill Paid"];
+            ViewBag.PayBill = _localizer["Pay Bill"];
+
             if (await _table.IsValidTableNumber(tableNumber) == false)
                 return RedirectToAction("TableNotExistError", "Home");
 
@@ -42,7 +64,7 @@ namespace RMUI.Controllers
             var table = await _table.GetTableByTableNumber(tableNumber);
             var orderDetails = await _order.GetOrderDetailByDiningTable(table.Id);
 
-            if (orderDetails.Count == 0) 
+            if (orderDetails.Count == 0)
                 return RedirectToAction("NoOrderError", "Home");
 
             var serverId = orderDetails.FirstOrDefault().ServerId;
@@ -97,8 +119,6 @@ namespace RMUI.Controllers
 
             var newOrder = await _order.GetOrderByTable(table.Id);
             await _order.PayBill(newOrder);
-
-            var submitted = await _order.GetOrderById(newOrder.Id);
 
             return RedirectToAction("Index", "Home");
         }

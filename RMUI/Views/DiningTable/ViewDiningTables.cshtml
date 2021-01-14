@@ -18,9 +18,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.TableNumber)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Seats)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -33,9 +30,6 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.TableNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Seats)
                 </td>
                 <td>
                     @Html.ActionLink("Edit", "EditDiningTable", new { id = item.Id }) |

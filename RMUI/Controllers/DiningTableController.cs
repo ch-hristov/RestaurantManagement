@@ -33,7 +33,7 @@ namespace RMUI.Controllers
                 var newTable = new DiningTableModel
                 {
                     TableNumber = table.TableNumber,
-                    Seats = table.Seats,
+                    Seats = 4,
                     IsBlocked = false
                 };
 
@@ -71,7 +71,6 @@ namespace RMUI.Controllers
                 {
                     Id = table.Id,
                     TableNumber = table.TableNumber,
-                    Seats = table.Seats,
                     IsBlocked = table.IsBlocked
                 });
             }
@@ -89,7 +88,6 @@ namespace RMUI.Controllers
             {
                 Id = foundTable.Id,
                 TableNumber = foundTable.TableNumber,
-                Seats = foundTable.Seats
             };
 
             return View(table);
@@ -103,7 +101,6 @@ namespace RMUI.Controllers
             {
                 Id = table.Id,
                 TableNumber = table.TableNumber,
-                Seats = table.Seats
             };
 
             await _data.UpdateTable(updatedTable);

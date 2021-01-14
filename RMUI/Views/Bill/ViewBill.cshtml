@@ -4,57 +4,58 @@
     ViewData["Title"] = "ViewBill";
 }
 
-<h1>Bill Details</h1>
+<h1>@ViewBag.BillDetailLabel</h1>
 
 <div>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.TableNumber)
+            @ViewBag.TableNumberLabel
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.TableNumber)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Server)
+            @ViewBag.Server
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Server)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.SubTotal)
+            @ViewBag.Subtotal
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.SubTotal)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Tax)
+            @ViewBag.Tax
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Tax)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Total)
+            @ViewBag.Total
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Total)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.BillPaid)
+            @ViewBag.BillPaid
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.BillPaid)
         </dd>
+
     </dl>
 </div>
 
 <table class="table">
     <thead>
         <tr>
-            <th>Food Name</th>
-            <th>Price</th>
-            <th>Quantity</th>
-            <th>Order Date</th>
+            <th>@ViewBag.FoodNameLabel</th>
+            <th>@ViewBag.FoodPriceLabel</th>
+            <th>@ViewBag.FoodQuantityLabel</th>
+            <th>@ViewBag.FoodOrderDateLabel</th>
             <th></th>
         </tr>
     </thead>

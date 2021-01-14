@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -34,7 +36,7 @@
                         </li>
 
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Foods</a>
+                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Menu editor</a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item text-dark" asp-area="" asp-controller="Food" asp-action="InsertFoodType">Add Food Type</a>
                                 <a class="dropdown-item text-dark" asp-area="" asp-controller="Food" asp-action="ViewFoodTypes">View Food Types</a>
@@ -59,9 +61,7 @@
 
                                 <a class="dropdown-item text-dark" asp-area="" asp-controller="Order" asp-action="ViewOrderRecords">View All Orders</a>
 
-                                <a class="dropdown-item text-dark" asp-area="" asp-controller="Order" asp-action="SearchOrder">Search Order</a>
-
-                                <a class="dropdown-item text-dark" asp-area="" asp-controller="Order" asp-action="Statistics">Order Statistics</a>
+                                <a class="dropdown-item text-dark" href="@Configuration["StatisticsUrl"]">Order Statistics</a>
 
                             </div>
                         </li>
@@ -85,9 +85,12 @@
     </div>
 
     <footer class="border-top footer text-muted">
+
         <div class="container">
             &copy; 2020 - RMUI - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+
         </div>
+
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

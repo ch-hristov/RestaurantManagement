@@ -13,7 +13,6 @@ namespace RMUI.Models
 
         [Display(Name = "Food Type")]
         [Required]
-        [StringLength(20, MinimumLength = 3, ErrorMessage = "You need to provide a long enough Food Type.")]
         public string FoodType { get; set; }
 
         [Display(Name = "Food Name")]
@@ -21,7 +20,12 @@ namespace RMUI.Models
         [StringLength(20, MinimumLength = 3, ErrorMessage = "You need to provide a long enough Food Name.")]
         public string FoodName { get; set; }
 
-        
+        [Display(Name = "Description")]
+        [Required]  
+        [StringLength(150, MinimumLength = 15, ErrorMessage = "You need to provide a long enough description (15+ characters).")]
+        public string ItemDescription { get; set; }
+
+
         [Required(ErrorMessage = "The Price field is required.")]
         [DataType(DataType.Currency)]
         public decimal Price { get; set; }
@@ -34,10 +38,15 @@ namespace RMUI.Models
         [Display(Name = "Blocked")]
         public bool IsBlocked { get; set; }
 
-
         [Required]
         [Display(Name = "Is promo?")]
         public bool IsPromo { get; set; }
+
+        [Display(Name = "Photo/Video 1 URL")]
+        public string VisualUrl1 { get; set; }
+
+        [Display(Name = "Photo/Video 2 URL")]
+        public string VisualUrl2 { get; set; }
 
     }
 }
