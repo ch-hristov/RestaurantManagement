@@ -6,3 +6,10 @@
 </ul>
 
 
+
+## Localization
+
+You can localize this application by:
+
+Adding resource files for each controller. These resource files are accessed by the IStringLocalizer<Type> class.
+After accessing them you can pass them to the view using ViewBag. 

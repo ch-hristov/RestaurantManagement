@@ -68,9 +68,6 @@
     </div>
 </div>
 
-
-
-
 <script>
     function register(selector, holder) {
         $(selector).bind('input', function () {
@@ -81,11 +78,9 @@
         register('#ad1', '#imageHolder1')
         register('#ad2', '#imageHolder2')
         register('#ad3', '#imageHolder3')
-    })
+    });
 
 </script>
-
-
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

@@ -69,8 +69,6 @@
                         {
                             @*@Html.ActionLink("Edit", "EditOrder", new { id = item.Id }) @:|*@
 
-                            @Html.ActionLink("Details", "TableOrdersDetails", new { tableId = item.TableNumber }) @:|
-
                             @Html.ActionLink("Bill", "ViewBill", "Bill", new { tableNumber = item.TableNumber })
 
                         }
