@@ -8,7 +8,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Index">
+        <form id="form" asp-action="Index">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
@@ -21,7 +21,7 @@
                     <div style="display:flex; flex-direction:column; justify-content:center">
                         <span>@ViewBag.DisableAdLabel</span>
                         <label class="switch">
-                            <input asp-for="Ad1Blocked" type="checkbox">
+                            <input asp-for="Ad1Blocked" id="ad1Text" type="checkbox">
                             <span class="slider round"></span>
                         </label>
                     </div>
@@ -37,7 +37,7 @@
                     <div style="display:flex; flex-direction:column; justify-content:center">
                         <span>@ViewBag.DisableAdLabel</span>
                         <label class="switch">
-                            <input asp-for="Ad2Blocked" type="checkbox">
+                            <input id="ad2Text" asp-for="Ad2Blocked" type="checkbox">
                             <span class="slider round"></span>
                         </label>
                     </div>
@@ -54,15 +54,12 @@
                     <div style="display:flex; flex-direction:column; justify-content:center">
                         <span>@ViewBag.DisableAdLabel</span>
                         <label class="switch">
-                            <input asp-for="Ad3Blocked"  type="checkbox">
+                            <input id="ad3Text" asp-for="Ad3Blocked"  type="checkbox">
                             <span class="slider round"></span>
                         </label>
                     </div>
 
                 </div>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>
@@ -74,11 +71,27 @@
             $(holder).attr('src', $(selector).val()); 
         });
     }
+
+    function saveOnStateChanged(selector) {
+        $(selector).change(() => {
+            $('#form').submit()
+        })
+    }
+
     $(document).ready(function ($) {
         register('#ad1', '#imageHolder1')
         register('#ad2', '#imageHolder2')
         register('#ad3', '#imageHolder3')
+
+        saveOnStateChanged('#ad1Text')
+        saveOnStateChanged('#ad2Text')
+        saveOnStateChanged('#ad3Text')
+        saveOnStateChanged("#ad1")
+        saveOnStateChanged("#ad2")
+        saveOnStateChanged("#ad3")
     });
+
+    
 
 </script>
 
