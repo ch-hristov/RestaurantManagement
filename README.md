@@ -6,6 +6,13 @@
 </ul>
 
 
+=======
+## How to set up
+1. Make sure to select RMUI as the startup project
+2. Open the package manager console and run "Update Database" (this is for the user auth. data)
+3. Select the RMData project and click Publish. 
+4. Edit the connection string to a database (this is for the order objects)
+
 ## Localization
 
 You can localize this application by:
