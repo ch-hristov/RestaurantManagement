@@ -46,7 +46,6 @@ namespace RMUI
 
             services.AddLocalization(opts => opts.ResourcesPath = "Resources");
 
-
             services.Configure<RequestLocalizationOptions>(options =>
             {
                 var supportedCultures = new[]
@@ -94,6 +93,7 @@ namespace RMUI
         public static void SeedUsers(UserManager<IdentityUser> userManager)
         {
             var u = userManager.FindByEmailAsync("abc@xyz.com").Result;
+
             if (u == null)
             {
                 IdentityUser user = new IdentityUser
@@ -105,6 +105,7 @@ namespace RMUI
                 _ = userManager.CreateAsync(user, "Spaghetti135_").Result;
             }
             var token = userManager.GenerateEmailConfirmationTokenAsync(u).Result;
+
             userManager.ConfirmEmailAsync(u, token).Wait();
             userManager.AddToRoleAsync(u, "Admin").Wait();
             userManager.AddToRoleAsync(u, "Manager").Wait();

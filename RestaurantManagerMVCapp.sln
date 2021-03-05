@@ -5,9 +5,15 @@ VisualStudioVersion = 16.0.30104.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "RMData", "RMData\RMData.sqlproj", "{8AEB8430-ECA1-4F68-BFAA-099A8732C981}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RMDataLibrary", "RMDataLibrary\RMDataLibrary.csproj", "{43D604BA-86AC-4CD5-8FD5-9D41B0E6FD6F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RMDataLibrary", "RMDataLibrary\RMDataLibrary.csproj", "{43D604BA-86AC-4CD5-8FD5-9D41B0E6FD6F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RMUI", "RMUI\RMUI.csproj", "{62F3CDD7-79A1-453B-9AF0-9D4C59DD7A58}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RMUI", "RMUI\RMUI.csproj", "{62F3CDD7-79A1-453B-9AF0-9D4C59DD7A58}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperAdminUnitTests", "SuperAdminUnitTests\SuperAdminUnitTests.csproj", "{DF0BF425-BC0B-4CAC-8C2D-21B718BB7010}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SuperAdmin", "SuperAdmin", "{0FB77E66-A1AB-4FF1-9F04-D02BAA45AA1E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperAdminApplications", "SuperAdminApplications\SuperAdminApplications.csproj", "{88AE9E35-F56A-4617-8ABA-F2E872CED45C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,9 +35,21 @@ Global
 		{62F3CDD7-79A1-453B-9AF0-9D4C59DD7A58}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62F3CDD7-79A1-453B-9AF0-9D4C59DD7A58}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{62F3CDD7-79A1-453B-9AF0-9D4C59DD7A58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF0BF425-BC0B-4CAC-8C2D-21B718BB7010}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF0BF425-BC0B-4CAC-8C2D-21B718BB7010}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF0BF425-BC0B-4CAC-8C2D-21B718BB7010}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF0BF425-BC0B-4CAC-8C2D-21B718BB7010}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88AE9E35-F56A-4617-8ABA-F2E872CED45C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88AE9E35-F56A-4617-8ABA-F2E872CED45C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88AE9E35-F56A-4617-8ABA-F2E872CED45C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88AE9E35-F56A-4617-8ABA-F2E872CED45C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DF0BF425-BC0B-4CAC-8C2D-21B718BB7010} = {0FB77E66-A1AB-4FF1-9F04-D02BAA45AA1E}
+		{88AE9E35-F56A-4617-8ABA-F2E872CED45C} = {0FB77E66-A1AB-4FF1-9F04-D02BAA45AA1E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {50E8E1D3-4B85-4D3A-BCE9-4085F848ABEB}

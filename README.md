@@ -6,7 +6,6 @@
 </ul>
 
 
-
 ## Localization
 
 You can localize this application by:

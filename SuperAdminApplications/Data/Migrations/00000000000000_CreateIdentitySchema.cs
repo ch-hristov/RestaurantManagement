@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace RMUI.Data.Migrations
+namespace SuperAdminApplications.Data.Migrations
 {
     public partial class CreateIdentitySchema : Migration
     {

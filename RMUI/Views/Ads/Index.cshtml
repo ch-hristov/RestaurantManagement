@@ -4,10 +4,9 @@
     ViewData["Title"] = "View";
 }
 <script src="~/lib/jquery/dist/jquery.js"></script>
-<h4>@ViewBag.ModifyAdsLabel</h4>
+<h1 class="text-center">@ViewBag.ModifyAdsLabel</h1>
 <hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="text-center">
         <form id="form" asp-action="Index">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
@@ -62,12 +61,12 @@
                 </div>
             </div>
         </form>
-    </div>
 </div>
 
 <script>
     function register(selector, holder) {
         $(selector).bind('input', function () {
+            $(holder).show()
             $(holder).attr('src', $(selector).val()); 
         });
     }
@@ -77,6 +76,7 @@
             $('#form').submit()
         })
     }
+
 
     $(document).ready(function ($) {
         register('#ad1', '#imageHolder1')

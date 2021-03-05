@@ -25,9 +25,9 @@ namespace RMUI.Controllers
         }
 
         [HttpGet]
+
         public async Task<IActionResult> Index()
-        {
-            var model = await _people.GetAds();
+        {var model = await _people.GetAds();
             var latest = model.OrderByDescending(x => x.CreateDate).FirstOrDefault();
             AdDisplayModel vm = new AdDisplayModel();
 
