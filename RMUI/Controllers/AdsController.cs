@@ -1,33 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using RMDataLibrary.DataAccess;
 using RMDataLibrary.Models;
+using RMUI.Data;
 using RMUI.Models;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace RMUI.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,SuperAdmin")]
     public class AdsController : Controller
     {
         private readonly IPersonData _people;
         private readonly IStringLocalizer<AdsController> _localizer;
 
-        public AdsController(IPersonData people, IStringLocalizer<AdsController> localizer)
+        private ApplicationDbContext _context { get; }
+
+        public bool CanRequest()
+        {
+            return _context.PermissionSource
+                                            .ToList()
+                                            .LastOrDefault()
+                                            .CanWorkWithAds;
+        }
+
+        public AdsController(IPersonData people, IStringLocalizer<AdsController> localizer, ApplicationDbContext context)
         {
             _people = people;
             _localizer = localizer;
+            _context = context;
         }
 
         [HttpGet]
 
         public async Task<IActionResult> Index()
-        {var model = await _people.GetAds();
+        {
+            var model = await _people.GetAds();
             var latest = model.OrderByDescending(x => x.CreateDate).FirstOrDefault();
             AdDisplayModel vm = new AdDisplayModel();
 

@@ -10,7 +10,7 @@ using RMUI.Models;
 
 namespace RMUI.Controllers
 {
-    [Authorize(Roles = "Manager")]
+    [Authorize(Roles = "SuperAdmin,Manager,Admin")]
     public class DiningTableController : Controller
     {
         private readonly IDiningTableData _data;
@@ -25,7 +25,7 @@ namespace RMUI.Controllers
             return View();
         }
 
-        // Insert DiningTable into database
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> InsertDiningTable(DiningTableDisplayModel table)
         {
             if (ModelState.IsValid)
@@ -63,10 +63,11 @@ namespace RMUI.Controllers
         {
             var allTables = await _data.GetAllTables();
 
-            List<DiningTableDisplayModel> tables = new List<DiningTableDisplayModel>();
+            var tables = new List<DiningTableDisplayModel>();
 
             foreach (var table in allTables)
             {
+                if (table.IsHidden) continue;
                 tables.Add(new DiningTableDisplayModel
                 {
                     Id = table.Id,
@@ -112,8 +113,12 @@ namespace RMUI.Controllers
         // Delete DiningTable with database Id = id
         public async Task<IActionResult> DeleteDiningTable(int id)
         {
-            await _data.DeleteTable(id);
-
+            var table = await _data.GetTableById(id);
+            if (table != null)
+            {
+                table.IsHidden = true;
+                await _data.UpdateTable(table);
+            }
             return RedirectToAction("ViewDiningTables");
         }
     }

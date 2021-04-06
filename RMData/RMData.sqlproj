@@ -75,17 +75,10 @@
     <Build Include="dbo\StoredProcedures\DiningTable_Update.sql" />
     <Build Include="dbo\StoredProcedures\DiningTable_Delete.sql" />
     <Build Include="dbo\StoredProcedures\DiningTable_GetById.sql" />
-    <Build Include="dbo\Tables\People.sql" />
-    <Build Include="dbo\StoredProcedures\People_Insert.sql" />
-    <Build Include="dbo\StoredProcedures\People_GetAll.sql" />
-    <Build Include="dbo\StoredProcedures\People_GetById.sql" />
-    <Build Include="dbo\StoredProcedures\People_Update.sql" />
-    <Build Include="dbo\StoredProcedures\People_Delete.sql" />
     <Build Include="dbo\Tables\Order.sql" />
     <Build Include="dbo\Tables\OrderDetail.sql" />
     <Build Include="dbo\StoredProcedures\Order_Insert.sql" />
     <Build Include="dbo\StoredProcedures\DiningTable_GetByTableNumber.sql" />
-    <Build Include="dbo\StoredProcedures\People_GetByFullName.sql" />
     <Build Include="dbo\StoredProcedures\Food_GetByName.sql" />
     <Build Include="dbo\Tables\FoodType.sql" />
     <Build Include="dbo\StoredProcedures\FoodType_Insert.sql" />
@@ -103,7 +96,6 @@
     <Build Include="dbo\StoredProcedures\Order_Update.sql" />
     <Build Include="dbo\StoredProcedures\OrderDetail_GetById.sql" />
     <Build Include="dbo\Tables\Bill.sql" />
-    <Build Include="dbo\StoredProcedures\Bill_Insert.sql" />
     <Build Include="dbo\StoredProcedures\Order_UpdateBillPaid.sql" />
     <Build Include="dbo\StoredProcedures\OrderDetail_UpdateBillPaid.sql" />
     <Build Include="dbo\StoredProcedures\FoodType_Delete.sql" />
@@ -113,6 +105,7 @@
     <Build Include="dbo\Tables\Advertisement.sql" />
     <Build Include="dbo\StoredProcedures\Advertisement_Insert.sql" />
     <Build Include="dbo\StoredProcedures\Advertisement_GetAll.sql" />
+    <Build Include="dbo\Tables\AspNetUsers.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PublishLocation\RMData.publish.xml" />

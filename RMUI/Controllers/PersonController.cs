@@ -3,120 +3,91 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using RMDataLibrary.DataAccess;
 using RMDataLibrary.Models;
 using RMUI.Models;
 
 namespace RMUI.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,SuperAdmin")]
     public class PersonController : Controller
     {
-        private readonly IPersonData _data;
 
-        public PersonController(IPersonData data)
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<IdentityUser> _userManager;
+
+        public PersonController(RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager)
         {
-            _data = data;
+            _roleManager = roleManager;
+            _userManager = userManager;
         }
-
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        // Insert Employee into database
-        public async Task<IActionResult> InsertPerson(PersonDisplayModel person)
-        {
-            if (ModelState.IsValid)
-            {
-                PersonModel newPerson = new PersonModel
-                {
-                    EmployeeID = person.EmployeeID,
-                    FirstName = person.FirstName,
-                    LastName = person.LastName,
-                    EmailAddress = person.EmailAddress,
-                    CellPhoneNumber = person.CellPhoneNumber
-                };
-
-                await _data.InsertPerson(newPerson);
-
-                return RedirectToAction("ViewPersons");
-            }
-
-            return View();
-        }
-
-
-        // View all employees as as list
         public async Task<IActionResult> ViewPersons()
         {
-            var results = await _data.GetAllPeople();
-
-            List<PersonDisplayModel> allEmployees = new List<PersonDisplayModel>();
-
-            foreach (var employee in results)
+            var roles = await _userManager.Users.ToListAsync();
+            return View(roles);
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddRole(string roleName)
+        {
+            if (roleName != null)
             {
-                allEmployees.Add(new PersonDisplayModel
-                {
-                    Id = employee.Id,
-                    EmployeeID = employee.EmployeeID,
-                    FirstName = employee.FirstName,
-                    LastName = employee.LastName,
-                    EmailAddress = employee.EmailAddress,
-                    CellPhoneNumber = employee.CellPhoneNumber
-                });
+                await _roleManager.CreateAsync(new IdentityRole(roleName.Trim()));
+            }
+            return RedirectToAction("Index");
+        }
+
+
+        public async Task<IActionResult> EditPerson(string id)
+        {
+            var data = await _userManager.FindByIdAsync(id);
+            return View(new PersonDisplayModel()
+            {
+                EmailAddress = data.Email,
+                Id = data.Id,
+                IsAdmin = await _userManager.IsInRoleAsync(data, "Admin"),
+                IsManager = await _userManager.IsInRoleAsync(data, "Manager"),
+                IsWaiter = await _userManager.IsInRoleAsync(data, "Server"),
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditPerson(PersonDisplayModel model)
+        {
+            var user = await _userManager.FindByIdAsync(model.Id);
+
+            var restrictAdmin = await _userManager.IsInRoleAsync(user, "DoNotAllowToBecomeAdmin");
+            var restrictMng = await _userManager.IsInRoleAsync(user, "DoNotAllowToBecomeManager");
+            var restrictWaiter = await _userManager.IsInRoleAsync(user, "DoNotAllowToBecomeServer");
+
+            if (model.IsAdmin && !restrictAdmin) await _userManager.AddToRoleAsync(user, "Admin");
+            else
+            {
+                if (!restrictAdmin)
+                    await _userManager.RemoveFromRoleAsync(user, "Admin");
             }
 
-            return View(allEmployees);
-        }
-
-
-        // Edit employee with database Id = id
-        public async Task<IActionResult> EditPerson(int id)
-        {
-            PersonModel foundPerson = await _data.GetPersonById(id);
-
-            PersonDisplayModel person = new PersonDisplayModel
+            if (model.IsWaiter && !restrictWaiter)
             {
-                Id = foundPerson.Id,
-                EmployeeID = foundPerson.EmployeeID,
-                FirstName = foundPerson.FirstName,
-                LastName = foundPerson.LastName,
-                EmailAddress = foundPerson.EmailAddress,
-                CellPhoneNumber = foundPerson.CellPhoneNumber
-            };
 
-            return View(person);
-        }
-
-
-        // Update employee info
-        public async Task<IActionResult> UpdatePerson(PersonDisplayModel person)
-        {
-            PersonModel updatedPerson = new PersonModel
+                await _userManager.AddToRoleAsync(user, "Server");
+            }
+            else
             {
-                Id = person.Id,
-                EmployeeID = person.EmployeeID,
-                FirstName = person.FirstName,
-                LastName = person.LastName,
-                EmailAddress = person.EmailAddress,
-                CellPhoneNumber = person.CellPhoneNumber
-            };
+                if (!restrictWaiter)
+                    await _userManager.RemoveFromRoleAsync(user, "Server");
+            }
 
-            await _data.UpdatePerson(updatedPerson);
+            if (model.IsManager && !restrictMng) await _userManager.AddToRoleAsync(user, "Manager");
+            else
+            {
+                if (!restrictMng)
+                    await _userManager.RemoveFromRoleAsync(user, "Manager");
+            }
 
-            return RedirectToAction("ViewPersons");
-        }
-
-
-
-        // Delete employee with database Id = id
-        public async Task<IActionResult> DeletePerson(int id)
-        {
-            await _data.DeletePerson(id);
-
-            return RedirectToAction("ViewPersons");
+            return View(nameof(ViewPersons));
         }
     }
 }

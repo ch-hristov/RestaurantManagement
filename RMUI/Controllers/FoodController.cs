@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using RMDataLibrary.DataAccess;
 using RMDataLibrary.Models;
+using RMUI.Data;
 using RMUI.Models;
 
 namespace RMUI.Controllers
 {
-    [Authorize(Roles = "Manager")]
+    [Authorize(Roles = "Manager,Admin,SuperAdmin")]
     public class FoodController : Controller
     {
         private readonly IFoodData _food;
@@ -20,18 +23,24 @@ namespace RMUI.Controllers
         private readonly IDiningTableData _table;
         private readonly IOrderData _order;
         private readonly IStringLocalizer<FoodController> _localizer;
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _management;
 
-        public FoodController(IFoodData food, 
-                              IPersonData people, 
-                              IDiningTableData table, 
+        public FoodController(IFoodData food,
+                              IPersonData people,
+                              IDiningTableData table,
                               IOrderData order,
-                              IStringLocalizer<FoodController> localizer)
+                              IStringLocalizer<FoodController> localizer,
+                              ApplicationDbContext context,
+                              UserManager<IdentityUser> managers)
         {
             _food = food;
             _people = people;
             _table = table;
             _order = order;
             _localizer = localizer;
+            _context = context;
+            _management = managers;
         }
 
         public IActionResult Index()
@@ -66,9 +75,9 @@ namespace RMUI.Controllers
             return RedirectToAction(nameof(ViewFoods));
 
         }
-
         public async Task<IActionResult> PromoFood(int id, bool status)
         {
+
             var foundFood = await _food.GetFoodById(id);
 
             foundFood.IsPromo = status;
@@ -100,6 +109,7 @@ namespace RMUI.Controllers
         // Insert food into database
         public async Task<IActionResult> InsertFood(FoodDisplayModel food)
         {
+
             if (ModelState.IsValid)
             {
                 var newFood = new FoodModel
@@ -107,8 +117,8 @@ namespace RMUI.Controllers
                     FoodType = _localizer[food.FoodType],
                     FoodName = _localizer[food.FoodName],
                     Price = food.Price,
-                    DisplayPhoto1 = food.VisualUrl1 ?? "",
-                    DisplayPhoto2 = food.VisualUrl2 ?? "",
+                    DisplayPhoto1 = food.DisplayPhoto1 ?? "",
+                    DisplayPhoto2 = food.DisplayPhoto1 ?? "",
                     ItemDescription = food.ItemDescription,
                     IsBlocked = food.IsBlocked,
                     IsPromo = food.IsPromo
@@ -160,14 +170,14 @@ namespace RMUI.Controllers
         // Get all Servers and populate as dropdown list items
         public async Task<List<SelectListItem>> GetAllServers()
         {
-            var persons = await _people.GetAllPeople();
+            var persons = await _management.Users.ToListAsync();
             var list = new List<SelectListItem>();
 
             foreach (var person in persons)
             {
                 list.Add(new SelectListItem
                 {
-                    Text = person.FullName,
+                    Text = person.Email,
                     Value = person.Id.ToString()
                 });
             }
@@ -213,8 +223,8 @@ namespace RMUI.Controllers
                     IsBlocked = food.IsBlocked,
                     IsPromo = food.IsPromo,
                     ItemDescription = food.ItemDescription,
-                    VisualUrl2 = food.DisplayPhoto2,
-                    VisualUrl1 = food.DisplayPhoto1
+                    DisplayPhoto1 = food.DisplayPhoto2,
+                    DisplayPhoto2 = food.DisplayPhoto1
                 });
             }
 
@@ -235,8 +245,8 @@ namespace RMUI.Controllers
                 Price = foundFood.Price,
                 TypeId = foundFood.TypeId,
                 IsPromo = foundFood.IsPromo,
-                VisualUrl1 = foundFood.DisplayPhoto1,
-                VisualUrl2 = foundFood.DisplayPhoto2,
+                DisplayPhoto1 = foundFood.DisplayPhoto1,
+                DisplayPhoto2 = foundFood.DisplayPhoto2,
                 ItemDescription = foundFood.ItemDescription,
                 IsBlocked = foundFood.IsBlocked
             };
@@ -256,10 +266,19 @@ namespace RMUI.Controllers
                 Price = food.Price,
                 TypeId = food.TypeId,
                 ItemDescription = food.ItemDescription,
-                DisplayPhoto1 = food.VisualUrl1,
-                DisplayPhoto2 = food.VisualUrl2,
+                DisplayPhoto1 = food.DisplayPhoto1,
+                DisplayPhoto2 = food.DisplayPhoto2,
                 IsPromo = food.IsPromo,
-                IsBlocked = food.IsBlocked
+                IsBlocked = food.IsBlocked,
+                FoodDescriptionCR = food.FoodDescriptionCR,
+                FoodDescriptionDE = food.FoodDescriptionDE,
+                FoodDescriptionES = food.FoodDescriptionES,
+                FoodDescriptionIT = food.FoodDescriptionIT,
+                FoodNameCR = food.FoodNameCR,
+                FoodNameDE = food.FoodNameDE,
+                FoodNameES = food.FoodNameES,
+                FoodNameIT = food.FoodNameIT
+
             };
 
             await _food.UpdateFood(updatedFood);

@@ -26,6 +26,10 @@ namespace RMUI.Models
         [DataType(DataType.Currency)]
         public decimal Price { get; set; }
 
+        [Required(ErrorMessage = "The Price field is required.")]
+        [DataType(DataType.Currency)]
+        public string SeatNumber { get; set; }
+
         [Required(ErrorMessage = "You need to enter a valid Quantity.")]
         public int Quantity { get; set; }
 

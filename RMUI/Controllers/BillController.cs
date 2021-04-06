@@ -1,14 +1,16 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using RMDataLibrary.DataAccess;
+using RMUI.Data;
 using RMUI.Models;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace RMUI.Controllers
 {
-    [Authorize(Roles = "Manager")]
+    [Authorize(Roles = "SuperAdmin,Admin,Manager,Server")]
     public class BillController : Controller
     {
         private readonly IOrderData _order;
@@ -17,13 +19,17 @@ namespace RMUI.Controllers
         private readonly IFoodData _food;
         private readonly IBillData _bill;
         private readonly IStringLocalizer<BillController> _localizer;
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userMng;
 
         public BillController(IOrderData order,
                               IDiningTableData table,
                               IPersonData people,
                               IFoodData food,
                               IBillData bill,
-                              IStringLocalizer<BillController> localizer)
+                              IStringLocalizer<BillController> localizer,
+                              ApplicationDbContext applicationDbCOntext,
+                              UserManager<IdentityUser> mng)
         {
             _order = order;
             _table = table;
@@ -31,6 +37,15 @@ namespace RMUI.Controllers
             _food = food;
             _bill = bill;
             _localizer = localizer;
+            _context = applicationDbCOntext;
+            _userMng = mng;
+        }
+
+        public bool CanRequest()
+        {
+            return _context.PermissionSource.AsEnumerable()
+                                            .LastOrDefault()
+                                            .CanWorkWithOrders;
         }
 
         public IActionResult Index()
@@ -67,16 +82,16 @@ namespace RMUI.Controllers
             if (orderDetails.Count == 0)
                 return RedirectToAction("NoOrderError", "Home");
 
-            var serverId = orderDetails.FirstOrDefault().ServerId;
-            var server = await _people.GetPersonById(serverId);
+            var user = await _userMng.GetUserAsync(HttpContext.User);
+
 
             // computes total amounts
-            var orderDisplay = await OrderDisplayModel.FromDetails(orderDetails, _food, 0, server.FullName, table.Id);
+            var orderDisplay = await OrderDisplayModel.FromDetails(orderDetails, _food, 0, user.Email, table.Id);
 
             var bill = new BillDisplayModel
             {
                 TableNumber = tableNumber,
-                Server = server.FullName,
+                Server = user.Id,
                 SubTotal = orderDisplay.SubTotal,
                 Tax = orderDisplay.Tax,
                 Total = orderDisplay.Total,
@@ -91,7 +106,7 @@ namespace RMUI.Controllers
                 {
                     Id = detail.Id,
                     TableNumber = table.TableNumber,
-                    Server = server.FullName,
+                    Server = user.Id,
                     FoodName = food.FoodName,
                     Price = food.Price,
                     Quantity = detail.Quantity,
@@ -116,10 +131,6 @@ namespace RMUI.Controllers
         {
             var table = await _table.GetTableByTableNumber(displayBill.TableNumber);
             await _order.InsertOrderByTable(table.Id);
-
-            var newOrder = await _order.GetOrderByTable(table.Id);
-            await _order.PayBill(newOrder);
-
             return RedirectToAction("Index", "Home");
         }
     }

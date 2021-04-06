@@ -34,8 +34,8 @@ namespace RMUI.Models
 
         [Required]
         [Display(Name = "Seat number")]
-        [Range(1, 4)]
-        public int SeatNumber { get;  set; }
+        [Range(typeof(string), "A", "D")]
+        public string SeatNumber { get;  set; }
 
     }
 }

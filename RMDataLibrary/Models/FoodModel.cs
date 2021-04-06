@@ -1,31 +1,43 @@
-﻿namespace RMDataLibrary.Models
+﻿
+namespace RMDataLibrary.Models
 {
     public class FoodModel
     {
         // Id in database
-        public int Id { get; set; }
+        public virtual int Id { get; set; }
 
         // Type of food
-        public string FoodType { get; set; }
+        public virtual string FoodType { get; set; }
 
         // Name of food
-        public string FoodName { get; set; }
+        public virtual string FoodName { get; set; }
 
         // Price of food
-        public decimal Price { get; set; }
+        public virtual decimal Price { get; set; }
 
         // Id of Food Type for this food
-        public int TypeId { get; set; }
+        public virtual int TypeId { get; set; }
 
-        public bool IsBlocked { get; set; }
+        public virtual bool IsBlocked { get; set; }
 
-        public bool IsPromo { get; set; }
+        public virtual bool IsPromo { get; set; }
 
-        public string DisplayPhoto1 { get; set; } = "";
+        public virtual string DisplayPhoto1 { get; set; } = "";
 
-        public string DisplayPhoto2 { get; set; } = "";
+        public virtual string DisplayPhoto2 { get; set; } = "";
 
-        public string ItemDescription { get; set; }
+        public virtual string ItemDescription { get; set; }
+
+        public virtual string FoodNameCR { get; set; }
+        public virtual string FoodNameES { get; set; }
+        public virtual string FoodNameIT { get; set; }
+        public virtual string FoodNameDE { get; set; }
+
+
+        public virtual string FoodDescriptionCR { get; set; }
+        public virtual string FoodDescriptionES { get; set; }
+        public virtual string FoodDescriptionIT { get; set; }
+        public virtual string FoodDescriptionDE { get; set; }
 
     }
 }

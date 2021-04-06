@@ -13,7 +13,7 @@ namespace RMDataLibrary.Models
         public int DiningTableId { get; set; }
 
         // Id of the server that served this dining table
-        public int ServerId { get; set; }
+        public string ServerId { get; set; }
         public decimal SubTotal { get; set; }
         public decimal Tax { get; set; }
         public decimal Total { get; set; }

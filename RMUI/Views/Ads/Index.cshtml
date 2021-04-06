@@ -4,7 +4,7 @@
     ViewData["Title"] = "View";
 }
 <script src="~/lib/jquery/dist/jquery.js"></script>
-<h1 class="text-center">@ViewBag.ModifyAdsLabel</h1>
+<h1>Table advertisement</h1>
 <hr />
 <div class="text-center">
         <form id="form" asp-action="Index">
@@ -15,7 +15,7 @@
                 <input id="ad1" asp-for="Ad1" class="form-control" />
                 <span asp-validation-for="Ad1" class="text-danger"></span>
 
-                <div style="display:flex; flex-direction:row; justify-content:center;">
+                <div style="display:flex; flex-direction:row; justify-content:space-between;">
                     <img style="margin:10px;" width="250" height="250" name="imageHolder1" id="imageHolder1" src="http://i.imgur.com/zAyt4lX.jpg">
                     <div style="display:flex; flex-direction:column; justify-content:center">
                         <span>@ViewBag.DisableAdLabel</span>
@@ -31,7 +31,7 @@
                 <label asp-for="Ad2" class="control-label"></label>
                 <input id="ad2" asp-for="Ad2" class="form-control" />
                 <span asp-validation-for="Ad2" class="text-danger"></span>
-                <div style="display:flex; flex-direction:row; justify-content:center;">
+                <div style="display:flex; flex-direction:row; justify-content:space-between;">
                     <img style="margin:10px;" width="250" height="250" name="imageHolder2" id="imageHolder2" src="http://i.imgur.com/zAyt4lX.jpg">
                     <div style="display:flex; flex-direction:column; justify-content:center">
                         <span>@ViewBag.DisableAdLabel</span>
@@ -48,7 +48,7 @@
                 <input id="ad3" asp-for="Ad3" class="form-control" />
                 <span asp-validation-for="Ad3" class="text-danger"></span>
 
-                <div style="display:flex; flex-direction:row; justify-content:center;">
+                <div style="display:flex; flex-direction:row; justify-content:space-between;">
                     <img style="margin:10px;" width="250" height="250" name="imageHolder3" id="imageHolder3" src="http://i.imgur.com/zAyt4lX.jpg">
                     <div style="display:flex; flex-direction:column; justify-content:center">
                         <span>@ViewBag.DisableAdLabel</span>

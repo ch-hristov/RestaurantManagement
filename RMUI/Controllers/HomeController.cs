@@ -18,20 +18,13 @@ namespace RMUI.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IStringLocalizer<HomeController> _localizer;
 
         public HomeController(
                                 ILogger<HomeController> logger, 
-                                UserManager<IdentityUser> userManager, 
-                                RoleManager<IdentityRole> roleManager,
                                 IStringLocalizer<HomeController> localizer)
         {
             _logger = logger;
-            _userManager = userManager;
-            _roleManager = roleManager;
-            ViewBag.StatisticsUrl = "https://MAika.com";
             _localizer = localizer;
         }
 
@@ -52,12 +45,10 @@ namespace RMUI.Controllers
             return LocalRedirect(returnUrl);
         }
 
-
         public IActionResult Privacy()
         {
             return View();
         }
-
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
@@ -65,18 +56,15 @@ namespace RMUI.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-
         public IActionResult PlaceOrderError()
         {
             return View();
         }
 
-
         public IActionResult NoOrderError()
         {
             return View();
         }
-
 
         public IActionResult TableNotExistError()
         {

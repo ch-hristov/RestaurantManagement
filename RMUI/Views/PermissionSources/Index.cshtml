@@ -1,0 +1,56 @@
+﻿@model IEnumerable<RMUI.Models.PermissionSource>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>@ViewData["Message"]</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CanWorkWithTables)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CanWorkWithOrders)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CanWorkWithAds)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CanWorkWithFoods)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CanPeopleRegister)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CanWorkWithTables)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CanWorkWithOrders)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CanWorkWithAds)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CanWorkWithFoods)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CanPeopleRegister)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

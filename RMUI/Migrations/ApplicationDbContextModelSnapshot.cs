@@ -15,7 +15,7 @@ namespace RMUI.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.4")
+                .HasAnnotation("ProductVersion", "3.1.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -48,31 +48,59 @@ namespace RMUI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "f2ab2825-9b1d-4cb7-9971-57434451b481",
-                            ConcurrencyStamp = "63ce1c64-80f5-4714-a360-4baabb227d28",
+                            Id = "4803c62f-c981-48cb-be8e-40abe2760bd9",
+                            ConcurrencyStamp = "49c2f637-fe8a-4330-89e5-f5b67be47490",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "7c322817-8fe8-44f9-a92d-51355f5f9b44",
-                            ConcurrencyStamp = "770b0265-08ed-4865-bada-7ccb5e95867b",
+                            Id = "d4b13c8c-47ea-4575-ba52-874b3e8feb95",
+                            ConcurrencyStamp = "de1024d7-b72b-4226-be98-f739cc36d6d7",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
-                            Id = "35386b5a-f6e7-4aff-bae4-07f4165db622",
-                            ConcurrencyStamp = "0c4ad2a2-b184-4a9f-954e-876b6ea0e648",
+                            Id = "e8877c9a-ac9d-4ea5-b899-e890222e2a89",
+                            ConcurrencyStamp = "08acc31a-7915-4d24-a1e3-6e553dc32d46",
                             Name = "Chef",
                             NormalizedName = "CHEF"
                         },
                         new
                         {
-                            Id = "e5812a4f-d209-4879-823a-c6f741ff474a",
-                            ConcurrencyStamp = "3205acd6-23cd-4d4b-bd10-c94f6e2636e4",
+                            Id = "6aa06efc-3386-4436-a0ed-bb0270331922",
+                            ConcurrencyStamp = "d77d9324-5760-4a78-9f1e-ced3d86103f9",
                             Name = "Server",
                             NormalizedName = "SERVER"
+                        },
+                        new
+                        {
+                            Id = "12478196-8175-459f-8c1d-3912cc568edf",
+                            ConcurrencyStamp = "824d2c47-64e6-45b1-9985-53c73e15d44c",
+                            Name = "SuperAdmin",
+                            NormalizedName = "SUPERADMIN"
+                        },
+                        new
+                        {
+                            Id = "39bbf01e-f49b-4c00-920a-fa07e5773d66",
+                            ConcurrencyStamp = "6bad1930-995f-46b7-a854-e4f7903125b7",
+                            Name = "DoNotAllowToBecomeAdmin",
+                            NormalizedName = "DONOTALLOWTOBECOMEADMIN"
+                        },
+                        new
+                        {
+                            Id = "884cafcc-2242-4a22-9fa6-bd3fb3899cf3",
+                            ConcurrencyStamp = "9af2c7cf-72ce-468c-846b-fc37390bc6bb",
+                            Name = "DoNotAllowToBecomeManager",
+                            NormalizedName = "DONOTALLOWTOBECOMEMANAGER"
+                        },
+                        new
+                        {
+                            Id = "9ff53935-be0b-4b17-a2db-e9bc89c26168",
+                            ConcurrencyStamp = "f7dac755-218d-4e93-af81-320cffa5606a",
+                            Name = "DoNotAllowToBecomeServer",
+                            NormalizedName = "DONOTALLOWTOBECOMESERVER"
                         });
                 });
 
@@ -280,6 +308,33 @@ namespace RMUI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AdsModel");
+                });
+
+            modelBuilder.Entity("RMUI.Models.PermissionSource", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("CanPeopleRegister")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanWorkWithAds")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanWorkWithFoods")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanWorkWithOrders")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanWorkWithTables")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PermissionSource");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

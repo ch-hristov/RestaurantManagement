@@ -1,0 +1,48 @@
+﻿@model RMUI.Models.PermissionSource
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>PermissionSource</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CanWorkWithTables)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CanWorkWithTables)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CanWorkWithOrders)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CanWorkWithOrders)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CanWorkWithAds)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CanWorkWithAds)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CanWorkWithFoods)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CanWorkWithFoods)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CanPeopleRegister)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CanPeopleRegister)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

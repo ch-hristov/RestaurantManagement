@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - RMUI</title>
+    <title>@ViewData["Title"] - Restaurant management</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
@@ -13,7 +13,6 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">RMUI</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -25,15 +24,18 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="SuperAdmin" asp-action="ViewPersons">SuperAdmin</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Ads" asp-action="Index">Ads</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Employees</a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item text-dark" asp-area="" asp-controller="Person" asp-action="InsertPerson">Add Employee</a>
                                 <a class="dropdown-item text-dark" asp-area="" asp-controller="Person" asp-action="ViewPersons">View Employees</a>
                             </div>
                         </li>
+
 
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Menu editor</a>
@@ -46,7 +48,7 @@
                         </li>
 
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dining Tables</a>
+                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dining tables</a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item text-dark" asp-area="" asp-controller="DiningTable" asp-action="InsertDiningTable">Add Table</a>
                                 <a class="dropdown-item text-dark" asp-area="" asp-controller="DiningTable" asp-action="ViewDiningTables">View Tables</a>
@@ -57,11 +59,10 @@
                             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Orders</a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item text-dark" asp-area="" asp-controller="Order" asp-action="CreateOrder">Create Order</a>
-                                <a class="dropdown-item text-dark" asp-area="" asp-controller="Order" asp-action="ViewRecordsAsOrders">View Active Orders</a>
+                                <a class="dropdown-item text-dark" asp-area="" asp-controller="Order" asp-action="ViewUnpaidRecordsAsOrders">View Active Orders</a>
 
                                 <a class="dropdown-item text-dark" asp-area="" asp-controller="Order" asp-action="ViewOrderRecords">View All Orders</a>
 
-                                <a class="dropdown-item text-dark" href="@Configuration["StatisticsUrl"]">Order Statistics</a>
 
                             </div>
                         </li>
@@ -72,6 +73,10 @@
                                 <a class="dropdown-item text-dark" asp-area="" asp-controller="Repository" asp-action="GetAllOrders">View All Orders</a>
                                 <a class="dropdown-item text-dark" asp-area="" asp-controller="Repository" asp-action="GetAllOrderDetails">View All Order Details</a>
                             </div>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="@Configuration["StatisticsUrl"]">Statistics</a>
                         </li>
                     </ul>
                 </div>
@@ -87,8 +92,8 @@
     <footer class="border-top footer text-muted">
 
         <div class="container">
-            &copy; 2020 - RMUI - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-
+            &copy; © 2021 - Futuris Q d.o.o. - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            @*@await Html.PartialAsync("_SelectLanguagePartial")*@
         </div>
 
     </footer>

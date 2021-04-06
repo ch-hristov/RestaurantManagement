@@ -51,6 +51,8 @@ namespace RMDataLibrary.DataAccess
             order.Tax = order.SubTotal * taxRate;
             order.Total = order.SubTotal + order.Tax;
 
+            order.BillPaid = true;
+
             await _sql.SaveData<OrderModel>("Order_Insert", order);
 
             return order;
@@ -143,8 +145,7 @@ namespace RMDataLibrary.DataAccess
 
         public async Task PayBill(OrderModel order)
         {
-            await _sql.SaveData("Order_UpdateBillPaid", new { Id = order.Id });
-            await _sql.SaveData("OrderDetail_UpdateBillPaid", new {  order.DiningTableId, OrderId = order.Id });
+            await _sql.SaveData("Order_UpdateBillPaid", new { Id = order.Id , DiningTableId = order.DiningTableId, OrderId = order.Id });
         }
 
 

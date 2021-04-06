@@ -8,11 +8,8 @@ namespace RMUI.Models
 {
     public class PersonDisplayModel
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
 
-        [Required]
-        [Display(Name = "Employee ID")]
-        public int EmployeeID { get; set; }
 
         [Required]
         [Display(Name ="First Name")]
@@ -32,6 +29,26 @@ namespace RMUI.Models
         [Phone]
         public string CellPhoneNumber { get; set; }
 
+
+        [Display(Name = "Do not allow to become admin?")]
+        public bool DoNotAllowToBecomeAdmin { get; set; }
+
+
+        [Display(Name = "Do not allow to become manager?")]
+        public bool DoNotAllowToBecomeManager { get; set; }
+
+
+        [Display(Name = "Do not allow to become waiter?")]
+        public bool DoNotAllowToBecomeServer { get; set; }
+
+
+        [Display(Name = "Is administrator?")]
+        public bool IsAdmin { get; set; }
+        [Display(Name = "Is manager?")]
+        public bool IsManager { get; set; }
+
+        [Display(Name = "Is server?")]
+        public bool IsWaiter { get; set; }
 
         [Display(Name = "Full Name")]
         public string FullName {

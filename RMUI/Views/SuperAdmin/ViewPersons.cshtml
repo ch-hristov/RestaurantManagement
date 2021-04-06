@@ -1,0 +1,62 @@
+﻿@{
+    ViewData["Title"] = "View Employees";
+}
+@model List<Microsoft.AspNetCore.Identity.IdentityUser>
+
+@using Microsoft.AspNetCore.Identity
+@inject RoleManager<IdentityRole> RoleManager
+@inject UserManager<IdentityUser> UserManager
+
+<h1>Administrator Role Manager</h1>
+
+<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register a person</a>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+
+            <th>User</th>
+            @foreach (var role in RoleManager.Roles)
+            {
+                if (role.Name == "SuperAdmin") continue;
+                if (role.Name.ToLower().StartsWith("donot")) continue;
+
+                <th>@role.Name</th>
+            }
+            <th>Edit</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in UserManager.Users.ToList())
+        {
+        <td>@user.Email</td>
+        @foreach (var role in RoleManager.Roles)
+        {
+            if (role.Name == "SuperAdmin") continue;
+            {
+                var isInRole = UserManager.IsInRoleAsync(user, role.Name).Result;
+                if (role.Name.ToLower().StartsWith("donot")) continue;
+
+                if (isInRole)
+                {
+                    <td>
+                        <input type="checkbox" checked="checked" readonly="readonly" />
+                    </td>
+                }
+                else
+                {
+                    <td>
+
+                        <input type="checkbox" readonly="readonly" />
+                    </td>
+                }
+
+            }
+
+        }
+        <td> <a asp-action="EditPerson" asp-route-id="@user.Id">Edit</a></td>
+
+        <tr></tr>
+    }
+        </tbody>
+    </table>

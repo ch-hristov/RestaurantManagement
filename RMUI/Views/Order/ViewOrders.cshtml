@@ -67,7 +67,7 @@
                     @{
                         if (!item.BillPaid)
                         {
-                            @*@Html.ActionLink("Edit", "EditOrder", new { id = item.Id }) @:|*@
+                            @Html.ActionLink("Details", "OrderDetailsByTableNumber", new { tableNumber = item.TableNumber}) @:|
 
                             @Html.ActionLink("Bill", "ViewBill", "Bill", new { tableNumber = item.TableNumber })
 

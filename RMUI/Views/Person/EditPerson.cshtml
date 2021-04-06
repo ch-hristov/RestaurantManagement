@@ -1,56 +1,36 @@
-﻿@model RMUI.Models.PersonDisplayModel
+﻿@using Microsoft.AspNetCore.Identity
+@model PersonDisplayModel
 
 @{
     ViewData["Title"] = "Edit Employee";
 }
 
+
 <h1 class="text-center">Edit Employee</h1>
 
 <hr />
-<div class="text-center">
-    <div style="width:40%; margin:50px auto;">
-        <form asp-action="UpdatePerson">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div hidden="hidden" class="form-group">
-                <label asp-for="Id" class="control-label"></label>
-                <input asp-for="Id" class="form-control" />
-                <span asp-validation-for="Id" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EmployeeID" class="control-label"></label>
-                <input asp-for="EmployeeID" class="form-control" />
-                <span asp-validation-for="EmployeeID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FirstName" class="control-label"></label>
-                <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EmailAddress" class="control-label"></label>
-                <input asp-for="EmailAddress" class="form-control" />
-                <span asp-validation-for="EmailAddress" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CellPhoneNumber" class="control-label"></label>
-                <input asp-for="CellPhoneNumber" class="form-control" />
-                <span asp-validation-for="CellPhoneNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+<form asp-action="EditPerson">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="text-center" style="display:flex; flex-direction:column">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="IsAdmin" class="control-label"></label>
+            <input asp-for="IsAdmin" class="form-control" />
+            <span asp-validation-for="IsAdmin" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="IsManager" class="control-label"></label>
+            <input asp-for="IsManager" class="form-control" />
+            <span asp-validation-for="IsManager" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="IsWaiter" class="control-label"></label>
+            <input asp-for="IsWaiter" class="form-control" />
+            <span asp-validation-for="IsWaiter" class="text-danger"></span>
+        </div>
+        <button type="submit">Send</button>
     </div>
-</div>
-
-<div class="text-center">
-    <a asp-action="ViewPersons">Back to Employee List</a>
-</div>
+</form>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

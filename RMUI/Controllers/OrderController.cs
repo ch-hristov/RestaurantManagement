@@ -4,6 +4,7 @@ using iText.Kernel.Pdf.Canvas.Draw;
 using iText.Layout.Element;
 using iText.Layout.Properties;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Localization;
@@ -18,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace RMUI.Controllers
 {
-    [Authorize(Roles = "Server")]
+    [Authorize(Roles = "Server,Manager,Admin,SuperAdmin")]
     public partial class OrderController : Controller
     {
         private readonly IFoodData _food;
@@ -26,16 +27,19 @@ namespace RMUI.Controllers
         private readonly IDiningTableData _table;
         private readonly IOrderData _order;
         private readonly IStringLocalizer<OrderController> _localizer;
+        private readonly UserManager<IdentityUser> _userMng;
 
         public OrderController(IFoodData food, IPersonData people,
                                IDiningTableData table, IOrderData order,
-                               IStringLocalizer<OrderController> localizer)
+                               IStringLocalizer<OrderController> localizer,
+                               UserManager<IdentityUser> userMng)
         {
             _food = food;
             _people = people;
             _table = table;
             _order = order;
             _localizer = localizer;
+            _userMng = userMng;
         }
 
 
@@ -61,17 +65,14 @@ namespace RMUI.Controllers
         // Get all Servers and populate as dropdown list items
         public async Task<List<SelectListItem>> GetAllServers()
         {
-            var persons = await _people.GetAllPeople();
+            var user = await _userMng.GetUserAsync(HttpContext.User);
             var list = new List<SelectListItem>();
 
-            foreach (var person in persons)
+            list.Add(new SelectListItem
             {
-                list.Add(new SelectListItem
-                {
-                    Text = person.FullName,
-                    Value = person.Id.ToString()
-                });
-            }
+                Text = user.Email,
+                Value = user.Id.ToString()
+            });
 
             return list;
         }
@@ -178,7 +179,7 @@ namespace RMUI.Controllers
 
             var list = new List<SelectListItem>();
 
-            foreach (var food in Enumerable.Range(1, 4))
+            foreach (var food in new[] { "A", "B" , "C", "D" })
             {
                 list.Add(new SelectListItem
                 {
@@ -195,7 +196,6 @@ namespace RMUI.Controllers
             return View();
         }
 
-
         // Post the input food order detail for inserting into databse and repopulate dropdown lists
         [HttpPost]
         public async Task<IActionResult> CreateOrder(OrderFillInModel order)
@@ -207,10 +207,10 @@ namespace RMUI.Controllers
                 var detail = new OrderDetailModel
                 {
                     DiningTableId = table.Id,
-                    ServerId = int.Parse(order.Server),
+                    ServerId = order.Server,
                     FoodId = int.Parse(order.FoodName),
                     Quantity = order.Quantity,
-                    SeatNumber = order.SeatNumber,
+                    SeatNumber = order.SeatNumber
                 };
 
                 await _order.InsertOrderDetail(detail);
@@ -263,7 +263,7 @@ namespace RMUI.Controllers
             }
             else
             {
-                var server = await _people.GetPersonById(orderDetails[0].ServerId);
+                var server = await _userMng.FindByIdAsync(orderDetails[0].ServerId);
 
                 foreach (var detail in orderDetails)
                 {
@@ -273,7 +273,7 @@ namespace RMUI.Controllers
                     {
                         Id = detail.Id,
                         TableNumber = tableNumber,
-                        Server = server.FullName,
+                        Server = server.Email,
                         FoodName = food.FoodName,
                         Price = food.Price,
                         Quantity = detail.Quantity,
@@ -293,9 +293,10 @@ namespace RMUI.Controllers
 
 
         // Get the order summary for records which haven't been paid just yet
-        public async Task<IActionResult> ViewRecordsAsOrders()
+        public async Task<IActionResult> ViewUnpaidRecordsAsOrders()
         {
             var orders = new List<OrderDisplayModel>();
+                
 
             foreach (var table in await _table.GetAllTables())
             {
@@ -303,10 +304,11 @@ namespace RMUI.Controllers
 
                 if (orderList.Count > 0)
                 {
-                    var firstOrder = orderList.OrderBy(x => x.OrderDate).First();
-                    var server = await _people.GetPersonById(firstOrder.ServerId);
 
-                    var orderDisplay = await OrderDisplayModel.FromDetails(orderList, _food, 0, server.FullName, table.TableNumber);
+                    var firstOrder = orderList.OrderBy(x => x.OrderDate).First();
+
+                    var server = await _userMng.FindByIdAsync(firstOrder.ServerId);
+                    var orderDisplay = await OrderDisplayModel.FromDetails(orderList, _food, 0, server.Email , table.TableNumber);
                     orders.Add(orderDisplay);
                 }
             }
@@ -324,13 +326,13 @@ namespace RMUI.Controllers
             foreach (var order in orderList.OrderByDescending(x => x.CreatedDate))
             {
                 var table = await _table.GetTableById(order.DiningTableId);
-                var server = await _people.GetPersonById(order.ServerId);
+                var server = await _userMng.FindByIdAsync(order.ServerId);
 
                 orders.Add(new OrderDisplayModel
                 {
                     Id = order.Id,
                     TableNumber = table.TableNumber,
-                    Server = server.FullName,
+                    Server = server.Email,
                     SubTotal = order.SubTotal,
                     Tax = order.Tax,
                     Total = order.Total,
@@ -347,14 +349,14 @@ namespace RMUI.Controllers
         {
             var detail = await _order.GetOrderDetailById(id);
             var table = await _table.GetTableById(detail.DiningTableId);
-            var server = await _people.GetPersonById(detail.ServerId);
+            var server = await _userMng.FindByIdAsync(detail.ServerId);
             var food = await _food.GetFoodById(detail.FoodId);
 
             OrderDetailDisplayModel displayDetail = new OrderDetailDisplayModel
             {
                 Id = id,
                 TableNumber = table.TableNumber,
-                Server = server.FullName,
+                Server = server.Email,
                 FoodName = food.FoodName,
                 Price = food.Price,
                 Quantity = detail.Quantity,
@@ -364,45 +366,19 @@ namespace RMUI.Controllers
             return View(displayDetail);
         }
 
-
-        // Update the specific ordered food detail in database
-        public async Task<IActionResult> UpdateOrderDetail(OrderDetailDisplayModel displayDetail)
-        {
-            var table = await _table.GetTableByTableNumber(displayDetail.TableNumber);
-            var fullName = displayDetail.Server.Split(" ");
-            var server = await _people.GetPersonByFullName(fullName[0], fullName[1]);
-            var food = await _food.GetFoodByName(displayDetail.FoodName);
-
-            var orderDetail = new OrderDetailModel
-            {
-                Id = displayDetail.Id,
-                DiningTableId = table.Id,
-                ServerId = server.Id,
-                FoodId = food.Id,
-                Quantity = displayDetail.Quantity,
-                OrderDate = displayDetail.OrderDate,
-                OrderId = displayDetail.OrderId
-            };
-
-            await _order.UpdateOrderDetail(orderDetail);
-
-            return RedirectToAction("OrderDetailsByTableNumber", new { table.TableNumber });
-        }
-
-
         // Get a specific ordered food detail with Id = id
         public async Task<IActionResult> OrderByTableDetail(int id)
         {
             var detail = await _order.GetOrderDetailById(id);
             var table = await _table.GetTableById(detail.DiningTableId);
-            var server = await _people.GetPersonById(detail.ServerId);
+            var server = await _userMng.FindByIdAsync(detail.ServerId);
             var food = await _food.GetFoodById(detail.FoodId);
 
             var displayDetail = new OrderDetailDisplayModel
             {
                 Id = id,
                 TableNumber = table.TableNumber,
-                Server = server.FullName,
+                Server = server.Email,
                 FoodName = food.FoodName,
                 Price = food.Price,
                 Quantity = detail.Quantity,
@@ -424,18 +400,19 @@ namespace RMUI.Controllers
 
             foreach (var detail in orderDetails)
             {
-                var server = await _people.GetPersonById(detail.ServerId);
+                var server = await _userMng.FindByIdAsync(detail.ServerId);
                 var food = await _food.GetFoodById(detail.FoodId);
 
                 displayDetails.Add(new OrderDetailDisplayModel
                 {
                     Id = detail.Id,
                     TableNumber = tableNumber,
-                    Server = server.FullName,
+                    Server = server.Email,
                     FoodName = food.FoodName,
                     Price = food.Price,
                     Quantity = detail.Quantity,
-                    OrderDate = detail.OrderDate
+                    OrderDate = detail.OrderDate,
+                    SeatNumber = detail.SeatNumber
                 });
             }
 
@@ -448,13 +425,13 @@ namespace RMUI.Controllers
         {
             var order = await _order.GetOrderById(id);
             var table = await _table.GetTableById(order.DiningTableId);
-            var server = await _people.GetPersonById(order.ServerId);
+            var server = await _userMng.FindByIdAsync(order.ServerId);
 
             OrderDisplayModel displayOrder = new OrderDisplayModel
             {
                 Id = id,
                 TableNumber = table.TableNumber,
-                Server = server.FullName,
+                Server = server.Email,
                 SubTotal = order.SubTotal,
                 Tax = order.Tax,
                 Total = order.Total,
@@ -467,28 +444,28 @@ namespace RMUI.Controllers
 
 
         // Update the specific order summary in database
-        public async Task<IActionResult> UpdateOrder(OrderDisplayModel display)
-        {
-            var table = await _table.GetTableByTableNumber(display.TableNumber);
-            string[] fullName = display.Server.Split(" ");
-            var server = await _people.GetPersonByFullName(fullName[0], fullName[1]);
+        //public async Task<IActionResult> UpdateOrder(OrderDisplayModel display)
+        //{
+        //    var table = await _table.GetTableByTableNumber(display.TableNumber);
+        //    string[] fullName = display.Server.Split(" ");
+        //    var server = await _people.GetPersonByFullName(fullName[0], fullName[1]);
 
-            var order = new OrderModel
-            {
-                Id = display.Id,
-                DiningTableId = table.Id,
-                ServerId = server.Id,
-                SubTotal = display.SubTotal,
-                Tax = display.Tax,
-                Total = display.Total,
-                CreatedDate = display.CreatedDate,
-                BillPaid = display.BillPaid
-            };
+        //    var order = new OrderModel
+        //    {
+        //        Id = display.Id,
+        //        DiningTableId = table.Id,
+        //        ServerId = server.Id,
+        //        SubTotal = display.SubTotal,
+        //        Tax = display.Tax,
+        //        Total = display.Total,
+        //        CreatedDate = display.CreatedDate,
+        //        BillPaid = display.BillPaid
+        //    };
 
-            await _order.UpdateOrder(order);
+        //    await _order.UpdateOrder(order);
 
-            return RedirectToAction("ViewOrders");
-        }
+        //    return RedirectToAction("ViewOrders");
+        //}
 
 
         public byte[] GenerateInvoice(PrintModel order)
@@ -582,7 +559,7 @@ namespace RMUI.Controllers
 
             var detail = orderDetails.First();
             var table = await _table.GetTableById(detail.DiningTableId);
-            var person = await _people.GetPersonById(detail.ServerId);
+            var person = await _userMng.FindByIdAsync(detail.ServerId);
 
             var foods = new PrintModel();
 
@@ -597,7 +574,7 @@ namespace RMUI.Controllers
                     foods.Quantities[food.FoodName] += quantity;
             }
 
-            foods.ServerName = person.FullName;
+            foods.ServerName = person.Email;
             foods.TotalSum = order.Total;
             foods.Table = table;
             foods.Time = order.CreatedDate;
@@ -623,7 +600,7 @@ namespace RMUI.Controllers
             }
             else
             {
-                var server = await _people.GetPersonById(orderDetails[0].ServerId);
+                var server = await _userMng.FindByIdAsync(orderDetails[0].ServerId);
 
                 foreach (var detail in orderDetails)
                 {
@@ -633,7 +610,7 @@ namespace RMUI.Controllers
                     {
                         Id = detail.Id,
                         TableNumber = table.TableNumber,
-                        Server = server.FullName,
+                        Server = server.Email,
                         FoodName = food.FoodName,
                         Price = food.Price,
                         Quantity = detail.Quantity,

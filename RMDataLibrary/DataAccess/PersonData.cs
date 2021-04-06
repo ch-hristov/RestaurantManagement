@@ -44,7 +44,7 @@ namespace RMDataLibrary.DataAccess
 
 
         // Get Person object with Id = id
-        public async Task<PersonModel> GetPersonById(int id)
+        public async Task<PersonModel> GetPersonById(string id)
         {
             var results = await _sql.LoadData<PersonModel, dynamic>("People_GetById", new { id });
 
@@ -72,6 +72,11 @@ namespace RMDataLibrary.DataAccess
         public async Task DeletePerson(int id)
         {
             await _sql.DeleteData<dynamic>("People_Delete", new { id });
+        }
+
+        public Task<PersonModel> GetPersonById(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

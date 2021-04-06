@@ -8,10 +8,18 @@
 	@IsPromo bit,
 	@DisplayPhoto1 nvarchar(500),
 	@DisplayPhoto2 nvarchar(500),
-	@ItemDescription nvarchar(500)
+	@ItemDescription nvarchar(500),
+	@FoodNameCR nvarchar(500),
+	@FoodNameDE nvarchar(500),
+	@FoodNameIT nvarchar(500),
+	@FoodNameES nvarchar(500),
+	@FoodDescriptionCR nvarchar(500),
+	@FoodDescriptionDE nvarchar(500),
+	@FoodDescriptionIT nvarchar(500),
+	@FoodDescriptionES nvarchar(500)
 AS
-	insert into dbo.Food (FoodType, FoodName, Price, TypeId, IsBlocked, IsPromo, DisplayPhoto1, DisplayPhoto2, ItemDescription)
-	values (@FoodType, @FoodName, @Price, @TypeId, @IsBlocked, @IsPromo, @DisplayPhoto1, @DisplayPhoto2, @ItemDescription);
+	insert into dbo.Food (FoodType, FoodName, Price, TypeId, IsBlocked, IsPromo, DisplayPhoto1, DisplayPhoto2, ItemDescription, FoodNameCR, FoodNameDE, FoodNameIT, FoodNameES, FoodDescriptionCR, FoodDescriptionDE, FoodDescriptionIT, FoodDescriptionES)
+	values (@FoodType, @FoodName, @Price, @TypeId, @IsBlocked, @IsPromo, @DisplayPhoto1, @DisplayPhoto2, @ItemDescription, @FoodNameCR, @FoodNameDE, @FoodNameIT, @FoodDescriptionCR, @FoodNameES, @FoodDescriptionDE, @FoodDescriptionIT, @FoodDescriptionES);
 
 	select @Id = SCOPE_IDENTITY();
 RETURN 0
