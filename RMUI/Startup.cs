@@ -42,6 +42,7 @@ namespace RMUI
 
             services.AddLocalization(opts => opts.ResourcesPath = "Resources");
 
+
             services.Configure<RequestLocalizationOptions>(options =>
             {
                 var supportedCultures = new[]
@@ -62,37 +63,12 @@ namespace RMUI
             services.AddTransient<IPersonData, PersonData>();
             services.AddTransient<IOrderData, OrderData>();
             services.AddTransient<IBillData, BillData>();
-
         }
 
-        public static void SeedUsers(UserManager<IdentityUser> userManager)
-        {
-            var u = userManager.FindByEmailAsync("abc@xyz.com").Result;
 
-            if (u == null)
-            {
-                IdentityUser user = new IdentityUser
-                {
-                    UserName = "abc@xyz.com",
-                    Email = "abc@xyz.com"
-                };
-
-                _ = userManager.CreateAsync(user, "Spaghetti135_").Result;
-                u = userManager.FindByEmailAsync("abc@xyz.com").Result;
-            }
-
-            var token = userManager.GenerateEmailConfirmationTokenAsync(u).Result;
-
-            userManager.ConfirmEmailAsync(u, token).Wait();
-            userManager.AddToRoleAsync(u, "Admin").Wait();
-            userManager.AddToRoleAsync(u, "Manager").Wait();
-            userManager.AddToRoleAsync(u, "Server").Wait();
-            userManager.AddToRoleAsync(u, "SuperAdmin").Wait();
-        }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<IdentityUser> userManager)
         {
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -105,7 +81,6 @@ namespace RMUI
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
 
             var locOptions = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
@@ -122,7 +97,7 @@ namespace RMUI
                 endpoints.MapRazorPages();
             });
 
-            SeedUsers(userManager);
+            SeedDbContext.SeedAdminUser(userManager);
         }
 
 
