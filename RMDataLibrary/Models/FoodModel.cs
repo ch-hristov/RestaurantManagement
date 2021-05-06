@@ -28,6 +28,8 @@ namespace RMDataLibrary.Models
 
         public virtual string ItemDescription { get; set; }
 
+        public virtual string Ingredients { get; set; }
+
         public virtual string FoodNameCR { get; set; }
         public virtual string FoodNameES { get; set; }
         public virtual string FoodNameIT { get; set; }

@@ -1,7 +1,7 @@
 ﻿@model RMUI.Models.FoodDisplayModel
 
 @{
-    ViewData["Title"] = "Insert Food";
+    ViewData["Title"] = "Pizza Creator";
 }
 <script src="~/lib/jquery/dist/jquery.js"></script>
 
@@ -9,7 +9,7 @@
 
 <hr />
 <div class="container">
-    <form enctype="multipart/form-data" asp-action="InsertFood" method="post">
+    <form enctype="multipart/form-data" asp-action="PizzaCreator" method="post">
         <div style="display:flex;" class="flex-row">
             <div class="col-7">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -37,8 +37,14 @@
                 </div>
 
                 <div class="form-group">
+                    <label asp-for="Ingredients" class="control-label"></label>
+                    <input asp-for="Ingredients" class="form-control" />
+                    <span asp-validation-for="Ingredients" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
                     <label asp-for="DisplayPhoto1" class="control-label"></label>
-                    <input type="file" name="visual1"  />
+                    <input type="file" id="visual1" />
                     <span asp-validation-for="DisplayPhoto1" class="text-danger"></span>
 
                     <img style="margin:10px;" width="250" height="250" name="imageHolder1" id="imageHolder1"
@@ -47,12 +53,13 @@
 
                 <div class="form-group">
                     <label asp-for="DisplayPhoto2" class="control-label"></label>
-                    <input type="file" name="visual2" />
+                    <input type="file" id="visual2" />
 
                     <span asp-validation-for="DisplayPhoto2" class="text-danger"></span>
                     <img style="margin:10px;" width="250" height="250" name="imageHolder2" id="imageHolder2"
                          src="http://i.imgur.com/zAyt4lX.jpg">
                 </div>
+
             </div>
 
             <div class="col-7">
@@ -115,15 +122,24 @@
 
 
 <script>
-    function register(selector, holder) {
-        $(selector).bind('input', function () {
-            $(holder).attr('src', $(selector).val()); //concatinate path if required
-        });
-    }
-    $(document).ready(function ($) {
-        register('#visual1', '#imageHolder1')
-        register('#visual2', '#imageHolder2')
-    })
+    function readURL(input, target) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $(target).attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]); // convert to base64 string
+            }
+        }
+
+    $("#visual1").change(function () {
+        readURL(this, '#imageHolder1');
+    });
+    $("#visual2").change(function () {
+        readURL(this, '#imageHolder2');
+    });
 
 </script>
 

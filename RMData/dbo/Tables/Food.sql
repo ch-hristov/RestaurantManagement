@@ -20,5 +20,6 @@
     [FoodDescriptionIT] NVARCHAR(500) NULL, 
     [FoodDescriptionFR] NVARCHAR(500) NULL, 
     [FoodDescriptionES] NVARCHAR(500) NULL, 
+    [Ingredients] NVARCHAR(1000) NULL, 
     CONSTRAINT [FK_Food_ToFoodType] FOREIGN KEY (TypeId) REFERENCES FoodType(Id) 
 )

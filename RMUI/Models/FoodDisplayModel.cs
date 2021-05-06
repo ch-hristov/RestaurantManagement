@@ -16,12 +16,12 @@ namespace RMUI.Models
         [Required]
         public override string FoodType { get; set; }
 
-        [Display(Name = "Food Name")]
+        [Display(Name = "Food Name English")]
         [Required]
         [StringLength(20, MinimumLength = 3, ErrorMessage = "You need to provide a long enough Food Name.")]
         public override string FoodName { get; set; }
 
-        [Display(Name = "Description")]
+        [Display(Name = "Description English")]
         [Required]
         [StringLength(150, MinimumLength = 15, ErrorMessage = "You need to provide a long enough description (15+ characters).")]
         public override string ItemDescription { get; set; }
@@ -42,10 +42,10 @@ namespace RMUI.Models
         [Display(Name = "Is promo?")]
         public override bool IsPromo { get; set; }
 
-        [Display(Name = "Photo/Video 1 URL")]
+        [Display(Name = "Photo 1 URL")]
         public override string DisplayPhoto1 { get; set; }
 
-        [Display(Name = "Photo/Video 2 URL")]
+        [Display(Name = "Photo 2 URL")]
         public override string DisplayPhoto2 { get; set; }
 
         [Display(Name = "Food description Croatian")]

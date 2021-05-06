@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -25,6 +28,7 @@ namespace RMUI.Controllers
         private readonly IStringLocalizer<FoodController> _localizer;
         private readonly ApplicationDbContext _context;
         private readonly UserManager<IdentityUser> _management;
+        private readonly IWebHostEnvironment hostingEnvironment;
 
         public FoodController(IFoodData food,
                               IPersonData people,
@@ -32,7 +36,8 @@ namespace RMUI.Controllers
                               IOrderData order,
                               IStringLocalizer<FoodController> localizer,
                               ApplicationDbContext context,
-                              UserManager<IdentityUser> managers)
+                              UserManager<IdentityUser> managers,
+                              IWebHostEnvironment environment)
         {
             _food = food;
             _people = people;
@@ -41,6 +46,7 @@ namespace RMUI.Controllers
             _localizer = localizer;
             _context = context;
             _management = managers;
+            hostingEnvironment = environment;
         }
 
         public IActionResult Index()
@@ -112,16 +118,56 @@ namespace RMUI.Controllers
 
             if (ModelState.IsValid)
             {
+                var files = HttpContext.Request.Form.Files;
+                var paths = new List<string>();
+                foreach (var file in files)
+                {
+                    if (file.Length > 0)
+                    {
+                        var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+
+                        //Assigning Unique Filename (Guid)
+                        var myUniqueFileName = Convert.ToString(Guid.NewGuid());
+
+                        //Getting file Extension
+                        var FileExtension = Path.GetExtension(fileName);
+
+                        // concating  FileName + FileExtension
+                        var newFileName = myUniqueFileName + FileExtension;
+
+                        // Combines two strings into a path.
+                        fileName = Path.Combine(hostingEnvironment.WebRootPath, "demoImages") + $@"\{newFileName}";
+
+                        if (!Directory.Exists(Path.GetDirectoryName(fileName)))
+                        {
+                            Directory.CreateDirectory(fileName);
+                        }
+
+                        // if you want to store path of folder in database
+                        var PathDB = "demoImages/" + newFileName;
+
+                        using (FileStream fs = System.IO.File.Create(fileName))
+                        {
+                            file.CopyTo(fs);
+                            fs.Flush();
+                        }
+
+                        paths.Add(PathDB);
+
+                    }
+                }
+
                 var newFood = new FoodModel
                 {
                     FoodType = _localizer[food.FoodType],
                     FoodName = _localizer[food.FoodName],
                     Price = food.Price,
-                    DisplayPhoto1 = food.DisplayPhoto1 ?? "",
-                    DisplayPhoto2 = food.DisplayPhoto1 ?? "",
+                    DisplayPhoto1 = paths.ElementAtOrDefault(0) ?? "",
+                    DisplayPhoto2 = paths.ElementAtOrDefault(1) ?? "",
                     ItemDescription = food.ItemDescription,
                     IsBlocked = food.IsBlocked,
-                    IsPromo = food.IsPromo
+                    IsPromo = food.IsPromo,
+                    Ingredients = ""
                 };
                 var typeId = int.Parse(food.FoodType);
 
@@ -204,6 +250,89 @@ namespace RMUI.Controllers
             return list;
         }
 
+
+        public async Task<IActionResult> PizzaCreator(FoodDisplayModel food)
+        {
+            if (ModelState.IsValid)
+            {
+                var files = HttpContext.Request.Form.Files;
+                var paths = new List<string>();
+                foreach (var file in files)
+                {
+                    if (file.Length > 0)
+                    {
+                        var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+
+                        //Assigning Unique Filename (Guid)
+                        var myUniqueFileName = Convert.ToString(Guid.NewGuid());
+
+                        //Getting file Extension
+                        var FileExtension = Path.GetExtension(fileName);
+
+                        // concating  FileName + FileExtension
+                        var newFileName = myUniqueFileName + FileExtension;
+
+                        // Combines two strings into a path.
+                        fileName = Path.Combine(hostingEnvironment.WebRootPath, "demoImages") + $@"\{newFileName}";
+
+                        if (!Directory.Exists(Path.GetDirectoryName(fileName)))
+                        {
+                            Directory.CreateDirectory(fileName);
+                        }
+
+                        // if you want to store path of folder in database
+                        var PathDB = "demoImages/" + newFileName;
+
+                        using (FileStream fs = System.IO.File.Create(fileName))
+                        {
+                            file.CopyTo(fs);
+                            fs.Flush();
+                        }
+
+                        paths.Add(PathDB);
+
+                    }
+                }
+
+
+                var newFood = new FoodModel
+                {
+                    FoodType = _localizer[food.FoodType],
+                    FoodName = _localizer[food.FoodName],
+                    Price = food.Price,
+                    Ingredients = food.Ingredients,
+                    DisplayPhoto1 = paths.ElementAtOrDefault(0) ?? "",
+                    DisplayPhoto2 = paths.ElementAtOrDefault(1) ?? "",
+                    ItemDescription = food.ItemDescription,
+                    IsBlocked = food.IsBlocked,
+                    IsPromo = food.IsPromo,
+                };
+                var typeId = int.Parse(food.FoodType);
+
+                newFood.TypeId = typeId;
+
+                var types = await _food.GetAllFoodTypes();
+                var typeName = types.FirstOrDefault(x => x.Id == typeId).FoodType;
+                newFood.FoodType = typeName;
+
+                await _food.InsertFood(newFood);
+
+                return RedirectToAction("ViewFoods");
+            }
+
+            var tables = await GetAllTables();
+            ViewBag.TableList = tables;
+
+            var servers = await GetAllServers();
+            ViewBag.ServerList = servers;
+
+            var foods = await GetFoodTypes();
+            ViewBag.FoodTypeList = foods;
+
+            return View();
+        }
+
+
         // View all foods as as list
         public async Task<IActionResult> ViewFoods()
         {
@@ -223,12 +352,14 @@ namespace RMUI.Controllers
                     IsBlocked = food.IsBlocked,
                     IsPromo = food.IsPromo,
                     ItemDescription = food.ItemDescription,
-                    DisplayPhoto1 = food.DisplayPhoto2,
-                    DisplayPhoto2 = food.DisplayPhoto1
+                    DisplayPhoto1 = string.Format("{0}://{1}{2}", Request.Scheme,
+            Request.Host, food.DisplayPhoto1),
+                    DisplayPhoto2 = string.Format("{0}://{1}{2}", Request.Scheme,
+            Request.Host, food.DisplayPhoto2)
                 });
             }
 
-            return View(foods);
+            return View(foods.OrderBy(x => x.FoodName));
         }
 
 
@@ -245,10 +376,13 @@ namespace RMUI.Controllers
                 Price = foundFood.Price,
                 TypeId = foundFood.TypeId,
                 IsPromo = foundFood.IsPromo,
-                DisplayPhoto1 = foundFood.DisplayPhoto1,
-                DisplayPhoto2 = foundFood.DisplayPhoto2,
+                DisplayPhoto1 = string.Format("{0}://{1}/{2}", Request.Scheme,
+            Request.Host, foundFood.DisplayPhoto1),
+                DisplayPhoto2 = string.Format("{0}://{1}/{2}", Request.Scheme,
+            Request.Host, foundFood.DisplayPhoto2),
                 ItemDescription = foundFood.ItemDescription,
-                IsBlocked = foundFood.IsBlocked
+                IsBlocked = foundFood.IsBlocked,
+                Ingredients = foundFood.Ingredients
             };
 
             return View(food);
