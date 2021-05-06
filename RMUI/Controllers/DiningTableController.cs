@@ -38,7 +38,6 @@ namespace RMUI.Controllers
                 };
 
                 await _data.InsertTable(newTable);
-
                 return RedirectToAction("ViewDiningTables");
             }
 
@@ -48,11 +47,8 @@ namespace RMUI.Controllers
         public async Task<IActionResult> BlockDiningTable(int id, bool status)
         {
             var foundTable = await _data.GetTableById(id);
-
             foundTable.IsBlocked = status;
-
             await _data.UpdateTable(foundTable);
-
             return RedirectToAction(nameof(ViewDiningTables));
 
         }
