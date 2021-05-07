@@ -7,16 +7,19 @@
 <h1>Table advertisement</h1>
 <hr />
 <div class="text-center">
-        <form id="form" asp-action="Index">
+        <form enctype="multipart/form-data" id="form" asp-action="Index" method="post"> 
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+
             <div class="form-group">
                 <label asp-for="Ad1" class="control-label"></label>
-                <input id="ad1" asp-for="Ad1" class="form-control" />
-                <span asp-validation-for="Ad1" class="text-danger"></span>
+                <input type="file" id="ad1" name="id1" />
+                <input type="hidden" asp-for="Ad1" />
+
+
 
                 <div style="display:flex; flex-direction:row; justify-content:space-between;">
-                    <img style="margin:10px;" width="250" height="250" name="imageHolder1" id="imageHolder1" src="http://i.imgur.com/zAyt4lX.jpg">
+                    <img style="margin:10px;" width="250" height="250" name="imageHolder1" id="imageHolder1" src="@Model.Ad1">
                     <div style="display:flex; flex-direction:column; justify-content:center">
                         <span>@ViewBag.DisableAdLabel</span>
                         <label class="switch">
@@ -29,10 +32,13 @@
             </div>
             <div class="form-group">
                 <label asp-for="Ad2" class="control-label"></label>
-                <input id="ad2" asp-for="Ad2" class="form-control" />
+                <input type="hidden" asp-for="Ad2" />
+
+                <input name="id2" type="file" id="ad2" />
+
                 <span asp-validation-for="Ad2" class="text-danger"></span>
                 <div style="display:flex; flex-direction:row; justify-content:space-between;">
-                    <img style="margin:10px;" width="250" height="250" name="imageHolder2" id="imageHolder2" src="http://i.imgur.com/zAyt4lX.jpg">
+                    <img style="margin:10px;" width="250" height="250" name="imageHolder2" id="imageHolder2" src="@Model.Ad2">
                     <div style="display:flex; flex-direction:column; justify-content:center">
                         <span>@ViewBag.DisableAdLabel</span>
                         <label class="switch">
@@ -45,31 +51,40 @@
             </div>
             <div class="form-group">
                 <label asp-for="Ad3" class="control-label"></label>
-                <input id="ad3" asp-for="Ad3" class="form-control" />
-                <span asp-validation-for="Ad3" class="text-danger"></span>
+                <input type="hidden" asp-for="Ad3" />
+
+                <input name="id3" type="file" id="ad3" />
 
                 <div style="display:flex; flex-direction:row; justify-content:space-between;">
-                    <img style="margin:10px;" width="250" height="250" name="imageHolder3" id="imageHolder3" src="http://i.imgur.com/zAyt4lX.jpg">
+                    <img style="margin:10px;" width="250" height="250" name="imageHolder3" id="imageHolder3" src="@Model.Ad3">
                     <div style="display:flex; flex-direction:column; justify-content:center">
                         <span>@ViewBag.DisableAdLabel</span>
                         <label class="switch">
-                            <input id="ad3Text" asp-for="Ad3Blocked"  type="checkbox">
+                            <input id="ad3Text" asp-for="Ad3Blocked" type="checkbox">
                             <span class="slider round"></span>
                         </label>
                     </div>
 
                 </div>
             </div>
+
         </form>
 </div>
 
 <script>
-    function register(selector, holder) {
-        $(selector).bind('input', function () {
-            $(holder).show()
-            $(holder).attr('src', $(selector).val()); 
-        });
+    function readURL(input, target) {
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $(target).attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]); // convert to base64 string
+        }
     }
+
+  
 
     function saveOnStateChanged(selector) {
         $(selector).change(() => {
@@ -79,9 +94,16 @@
 
 
     $(document).ready(function ($) {
-        register('#ad1', '#imageHolder1')
-        register('#ad2', '#imageHolder2')
-        register('#ad3', '#imageHolder3')
+        $("#ad1").change(function () {
+            readURL(this, '#imageHolder1');
+        });
+        $("#ad2").change(function () {
+            readURL(this, '#imageHolder2');
+        });
+        $("#ad3").change(function () {
+            readURL(this, '#imageHolder3');
+        });
+
 
         saveOnStateChanged('#ad1Text')
         saveOnStateChanged('#ad2Text')

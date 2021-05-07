@@ -38,7 +38,7 @@
 
                 <div class="form-group">
                     <label asp-for="DisplayPhoto1" class="control-label"></label>
-                    <input type="file" name="visual1"  />
+                    <input type="file" id="visual1"  />
                     <span asp-validation-for="DisplayPhoto1" class="text-danger"></span>
 
                     <img style="margin:10px;" width="250" height="250" name="imageHolder1" id="imageHolder1"
@@ -47,7 +47,7 @@
 
                 <div class="form-group">
                     <label asp-for="DisplayPhoto2" class="control-label"></label>
-                    <input type="file" name="visual2" />
+                    <input type="file" id="visual2" />
 
                     <span asp-validation-for="DisplayPhoto2" class="text-danger"></span>
                     <img style="margin:10px;" width="250" height="250" name="imageHolder2" id="imageHolder2"
@@ -115,15 +115,24 @@
 
 
 <script>
-    function register(selector, holder) {
-        $(selector).bind('input', function () {
-            $(holder).attr('src', $(selector).val()); //concatinate path if required
-        });
+    function readURL(input, target) {
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $(target).attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]); // convert to base64 string
+        }
     }
-    $(document).ready(function ($) {
-        register('#visual1', '#imageHolder1')
-        register('#visual2', '#imageHolder2')
-    })
+
+    $("#visual1").change(function () {
+        readURL(this, '#imageHolder1');
+    });
+    $("#visual2").change(function () {
+        readURL(this, '#imageHolder2');
+    });
 
 </script>
 

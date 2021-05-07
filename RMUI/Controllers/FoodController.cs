@@ -276,9 +276,7 @@ namespace RMUI.Controllers
                         fileName = Path.Combine(hostingEnvironment.WebRootPath, "demoImages") + $@"\{newFileName}";
 
                         if (!Directory.Exists(Path.GetDirectoryName(fileName)))
-                        {
                             Directory.CreateDirectory(fileName);
-                        }
 
                         // if you want to store path of folder in database
                         var PathDB = "demoImages/" + newFileName;
@@ -290,7 +288,6 @@ namespace RMUI.Controllers
                         }
 
                         paths.Add(PathDB);
-
                     }
                 }
 
@@ -305,7 +302,7 @@ namespace RMUI.Controllers
                     DisplayPhoto2 = paths.ElementAtOrDefault(1) ?? "",
                     ItemDescription = food.ItemDescription,
                     IsBlocked = food.IsBlocked,
-                    IsPromo = food.IsPromo,
+                    IsPromo = food.IsPromo
                 };
                 var typeId = int.Parse(food.FoodType);
 
@@ -352,10 +349,8 @@ namespace RMUI.Controllers
                     IsBlocked = food.IsBlocked,
                     IsPromo = food.IsPromo,
                     ItemDescription = food.ItemDescription,
-                    DisplayPhoto1 = string.Format("{0}://{1}{2}", Request.Scheme,
-            Request.Host, food.DisplayPhoto1),
-                    DisplayPhoto2 = string.Format("{0}://{1}{2}", Request.Scheme,
-            Request.Host, food.DisplayPhoto2)
+                    DisplayPhoto1 =  food.DisplayPhoto1,
+                    DisplayPhoto2 = food.DisplayPhoto2
                 });
             }
 
@@ -376,10 +371,8 @@ namespace RMUI.Controllers
                 Price = foundFood.Price,
                 TypeId = foundFood.TypeId,
                 IsPromo = foundFood.IsPromo,
-                DisplayPhoto1 = string.Format("{0}://{1}/{2}", Request.Scheme,
-            Request.Host, foundFood.DisplayPhoto1),
-                DisplayPhoto2 = string.Format("{0}://{1}/{2}", Request.Scheme,
-            Request.Host, foundFood.DisplayPhoto2),
+                DisplayPhoto1 = foundFood.DisplayPhoto1,
+                DisplayPhoto2 = foundFood.DisplayPhoto2,
                 ItemDescription = foundFood.ItemDescription,
                 IsBlocked = foundFood.IsBlocked,
                 Ingredients = foundFood.Ingredients
