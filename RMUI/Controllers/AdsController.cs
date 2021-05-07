@@ -46,11 +46,10 @@ namespace RMUI.Controllers
         {
             var model = await _people.GetAds();
             var latest = model.OrderByDescending(x => x.CreateDate).FirstOrDefault();
-            AdDisplayModel vm = new AdDisplayModel();
+            var vm = new AdDisplayModel();
 
             ViewBag.DisableAdLabel = _localizer["Disable Ad"];
             ViewBag.ModifyAdsLabel = _localizer["Modify Ads"];
-
 
             if (latest != null)
             {
