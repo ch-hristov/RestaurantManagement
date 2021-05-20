@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
+using RMUI.Models;
 
 namespace RMUI.Data
 {
@@ -29,6 +30,8 @@ namespace RMUI.Data
         public DbSet<RMDataLibrary.Models.AdsModel> AdsModel { get; set; }
 
         public DbSet<Models.PermissionSource> PermissionSource { get; set; }
+
+        public DbSet<RMUI.Models.PaymentOptionsModel> PaymentOptionsModel { get; set; }
     }
 
 

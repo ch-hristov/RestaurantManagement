@@ -1,0 +1,83 @@
+﻿@model IEnumerable<RMUI.Models.PaymentOptionsModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CompanyPayments)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cash)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreditCards)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VisaCards)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MasterCardCards)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaestroCards)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DinersCards)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AmericanExpressCards)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ApplePay)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CompanyPayments)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cash)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreditCards)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VisaCards)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MasterCardCards)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaestroCards)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DinersCards)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AmericanExpressCards)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ApplePay)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

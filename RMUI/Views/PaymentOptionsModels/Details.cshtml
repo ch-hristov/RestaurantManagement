@@ -1,0 +1,72 @@
+﻿@model RMUI.Models.PaymentOptionsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>PaymentOptionsModel</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CompanyPayments)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CompanyPayments)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Cash)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Cash)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CreditCards)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CreditCards)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.VisaCards)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.VisaCards)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.MasterCardCards)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.MasterCardCards)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.MaestroCards)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.MaestroCards)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DinersCards)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DinersCards)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.AmericanExpressCards)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.AmericanExpressCards)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ApplePay)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ApplePay)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
